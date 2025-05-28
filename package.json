@@ -4,5 +4,26 @@
   "main": "index.js",
   "author": "nelsonjr.dev@gmail.com",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "fix": "echo batata",
+    "prepare": "husky"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "./src/**/*.js,md,json}": [
+      "yarn fix"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husk": "^0.5.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0"
+  }
 }
