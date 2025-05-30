@@ -6,8 +6,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "fix": "echo batata",
-    "prepare": "husky"
+    "fix": "run-s \"fix:* {@}\" --",
+    "prepare": "husky",
+    "fix:lint": "eslint --fix --no-error-on-unmatched-pattern",
+    "fixformat": "prettier --write",
+    "format": "yarn fix:format 'src/**/*.(js|ts|md|json')",
+    "lint": "yarn fix:lint 'src/**/*.(js|ts|md|json')"
   },
   "commitlint": {
     "extends": [
@@ -24,6 +28,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "husk": "^0.5.3",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.0"
+    "lint-staged": "^16.1.0",
+    "npm-run-all": "^4.1.5"
   }
 }
