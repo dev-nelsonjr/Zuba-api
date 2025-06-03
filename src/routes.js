@@ -3,7 +3,7 @@ import * as users from './modules/users'
 export const router = new Router()
 
 //Auth
-router.post('/login', users.login)
+router.get('/login', users.login)
 
 // User routes
 router.get('/users', users.list)
