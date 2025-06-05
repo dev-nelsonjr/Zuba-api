@@ -3,7 +3,6 @@ module.exports = {
     ['@babel/preset-env', { targets: { node: 'current' } }],
   ],
   plugins: [
-    '@babel/plugin-proposal-optional-chaining',
     ['module-resolver', { alias: { '~': './src', '@': '.', } }],
   ],
 }

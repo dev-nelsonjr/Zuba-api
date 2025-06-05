@@ -40,14 +40,11 @@ it('Should throw a new error when credentials is not on correct format', () => {
 
 it('Should throw a new error when credentials is not base64 encoded', () => {
   //prepare
-  const email = 'nelson@gmail.com'
-  const password = '123456'
-  const token = Buffer.from(`${email}:${password}`)
-
-  const basicToken = `Basic ${token}`
+  const basicToken = 'Basic notBase64EncodedToken'
 
   // execute
   const result = () => decodeBasicToken(basicToken)
+
   // expectation
   expect(result).toThrowError('Wrong credentials is not correct encodedclea')
 })
