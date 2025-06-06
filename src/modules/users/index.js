@@ -28,7 +28,7 @@ export const login = async ctx => {
 
     const passwordEqual = await bcrypt.compare(password, user.password)
     if (!passwordEqual) {
-      ctx.status = 401
+      ctx.status = 404
       ctx.body = { message: 'Invalid credentials' }
       return
     }
