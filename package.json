@@ -61,6 +61,7 @@
     "jsonwebtoken": "^9.0.2",
     "koa": "^3.0.0",
     "koa-bodyparser": "^4.4.1",
-    "koa-router": "^13.0.1"
+    "koa-router": "^13.0.1",
+    "ramda": "^0.30.1"
   }
 }

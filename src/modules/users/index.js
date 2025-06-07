@@ -2,13 +2,13 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
 import { prisma } from '~/data'
-
 import { decodeBasicToken } from './services'
+import './model'
 
 export const login = async ctx => {
   let email, password
   try {
-    ;[email, password] = decodeBasicToken(ctx.headers.authorization)
+    [email, password] = decodeBasicToken(ctx.headers.authorization)
   } catch (error) {
     ctx.status = 401
     ctx.body = { message: 'Invalid authorization header format' }
@@ -16,22 +16,22 @@ export const login = async ctx => {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
+   const user = await prisma.user.findUnique({
+  where: { email, password },
+})
 
-    if (!user) {
-      ctx.status = 404
-      ctx.body = { message: 'User not found' }
-      return
-    }
+if (!user) {
+  ctx.status = 404
+  ctx.body = { message: 'User not found or invalid credentials' }
+  return
+}
 
-    const passwordEqual = await bcrypt.compare(password, user.password)
-    if (!passwordEqual) {
-      ctx.status = 404
-      ctx.body = { message: 'Invalid credentials' }
-      return
-    }
+    // const passwordEqual = await bcrypt.compare(password, user.password)
+    // if (!passwordEqual) {
+    //   ctx.status = 404
+    //   ctx.body = { message: 'Invalid credentials' }
+    //   return
+    // }
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
