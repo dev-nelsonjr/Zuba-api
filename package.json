@@ -9,7 +9,7 @@
     "fix": "run-s \"fix:* {@}\" --",
     "prepare": "husky",
     "fix:lint": "eslint --fix --no-error-on-unmatched-pattern",
-    "fixformat": "prettier --write",
+    "fix:format": "prettier --write",
     "format": "yarn fix:format 'src/**/*.(js|ts|md|json')",
     "lint": "yarn fix:lint 'src/**/*.(js|ts|md|json')"
   },
@@ -19,7 +19,7 @@
     ]
   },
   "lint-staged": {
-    "./src/**/*.js,md,json}": [
+    "./src/**/*.{js,md,json}": [
       "yarn fix"
     ]
   },
