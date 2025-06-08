@@ -11,7 +11,10 @@
     "fix:lint": "eslint --fix --no-error-on-unmatched-pattern",
     "fix:format": "prettier --write",
     "format": "yarn fix:format 'src/**/*.(js|ts|md|json')",
-    "lint": "yarn fix:lint 'src/**/*.(js|ts|md|json')"
+    "lint": "yarn fix:lint 'src/**/*.(js|ts|md|json')",
+    "prebuild": "rm -Rf ./dist",
+    "build": "babel src --extensions \".js\" --ignore \"*.spec.js,*.test.js\" --out-dir dist --copy-files",
+    "dev": "nodemon --exec babel-node src/index.js"
   },
   "commitlint": {
     "extends": [
@@ -24,6 +27,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.27.2",
+    "@babel/core": "^7.27.3",
+    "@babel/node": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.27.0",
@@ -34,10 +41,13 @@
     "husk": "^0.5.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
+    "nodemon": "^3.1.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.5.3"
   },
   "dependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^9.27.0"
   }
 }
