@@ -47,7 +47,11 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@koa/router": "^13.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
-    "eslint": "^9.27.0"
+    "eslint": "^9.27.0",
+    "koa": "^3.0.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^13.0.1"
   }
 }

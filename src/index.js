@@ -1,2 +1,11 @@
-import { x } from './x'
-console.log(x(100 * 2))
+import Koa from 'koa'
+import bodyParser from 'koa-bodyparser'
+
+const app = new Koa()
+import { router } from './routes.js'
+
+app.use(bodyParser())
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+app.listen(9100)
