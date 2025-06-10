@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 
@@ -8,4 +10,4 @@ app.use(bodyParser())
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-app.listen(9100)
+app.listen(process.env.SERVER_PORT)
