@@ -1821,6 +1821,13 @@ destroy@^1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
+docker-compose@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/docker-compose/-/docker-compose-1.2.0.tgz#e4c30afdd1a111b47e87d97754baa304302586fc"
+  integrity sha512-wIU1eHk3Op7dFgELRdmOYlPYS4gP8HhH1ZmZa13QZF59y0fblzFDFmKPhyc05phCy2hze9OEvNZAsoljrs+72w==
+  dependencies:
+    yaml "^2.2.2"
+
 dot-prop@^5.1.0:
   version "5.3.0"
   resolved "https://registry.npmjs.org/dot-prop/-/dot-prop-5.3.0.tgz"
@@ -4519,7 +4526,7 @@ yallist@^3.0.2:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
-yaml@^2.8.0:
+yaml@^2.2.2, yaml@^2.8.0:
   version "2.8.0"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.8.0.tgz"
   integrity sha512-4lLa/EcQCB0cJkyts+FpIRx5G/llPxfP6VQU5KByHEhLxY3IJCH0f0Hy1MHI8sClTvsIb8qwRJ6R/ZdlDJ/leQ==
