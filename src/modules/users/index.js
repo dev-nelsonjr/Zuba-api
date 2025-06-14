@@ -1,9 +1,27 @@
+import jwt from 'jsonwebtoken'
 import { prisma } from '~/data'
+export const login = async ctx => {
+  try {
+    const { email, password } = ctx.request.body
+    const [user] = await prisma.user.findMany({
+      where: { email, password },
+    })
+    if (!user) {
+      ctx.status = 404
+      return
+    }
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+    ctx.body = { user, token }
+  } catch (error) {
+    ctx.status = 500
+    ctx.body = 'Ups! Something went wrong'
+    return
+  }
+}
 
 export const list = async ctx => {
   try {
     const users = await prisma.user.findMany()
-
     ctx.body = users
   } catch (error) {
     ctx.status = 500
