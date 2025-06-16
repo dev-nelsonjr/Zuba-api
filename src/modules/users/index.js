@@ -4,11 +4,23 @@ import bcrypt from 'bcrypt'
 import { prisma } from '~/data'
 
 export const login = async ctx => {
+  console.log(
+    ctx.request.headers.authorization,
+    'Authorization header received'
+  )
+  const [type, credentials] = ctx.headers.authorization.split(' ')
+  if (type !== 'Basic') {
+    ctx.status = 401
+    return
+  }
   try {
-    const { email, password } = ctx.request.body
+    console.log('Login: Corpo da requisição recebido:', ctx.request.body)
+    const [email, password] = Buffer.from(credentials, 'base64')
+      .toString()
+      .split(':')
 
-    const [user] = await prisma.user.findMany({
-      where: { email, password },
+    const user = await prisma.user.findUnique({
+      where: { email },
     })
 
     if (!user) {
@@ -16,11 +28,19 @@ export const login = async ctx => {
       return
     }
 
+    const passwordEqual = await bcrypt.compare(password, user.password)
+    if (!passwordEqual) {
+      ctx.status = 401
+      ctx.body = 'Invalid credentials'
+      return
+    }
+
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (error) {
+    console.log('JWT_SECRET carregado:', process.env.JWT_SECRET)
     ctx.status = 500
-    ctx.body = 'Ups! Something went wrong'
+    ctx.body = 'user login error'
     return
   }
 }
@@ -32,7 +52,7 @@ export const list = async ctx => {
     ctx.body = users
   } catch (error) {
     ctx.status = 500
-    ctx.body = 'Ups! Something went wrong'
+    ctx.body = 'List users error'
     return
   }
 }
@@ -55,7 +75,7 @@ export const create = async ctx => {
     ctx.body = user
   } catch (err) {
     ctx.status = 500
-    ctx.body = 'Ups! Something went wrong'
+    ctx.body = 'User creation error'
     return
   }
 }
@@ -69,7 +89,7 @@ export const update = async ctx => {
     ctx.body = user
   } catch (err) {
     ctx.status = 500
-    ctx.body = 'Ups! Something went wrong'
+    ctx.body = 'User update error'
     return
   }
 }
@@ -81,7 +101,7 @@ export const remove = async ctx => {
     ctx.body = { id: ctx.params.id, message: 'User deleted successfully' }
   } catch (err) {
     ctx.status = 500
-    ctx.body = 'Ups! Something went wrong'
+    ctx.body = 'user deletion error'
     return
   }
 }
