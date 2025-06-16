@@ -1,15 +1,21 @@
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+
 import { prisma } from '~/data'
+
 export const login = async ctx => {
   try {
     const { email, password } = ctx.request.body
+
     const [user] = await prisma.user.findMany({
       where: { email, password },
     })
+
     if (!user) {
       ctx.status = 404
       return
     }
+
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (error) {
@@ -22,6 +28,7 @@ export const login = async ctx => {
 export const list = async ctx => {
   try {
     const users = await prisma.user.findMany()
+
     ctx.body = users
   } catch (error) {
     ctx.status = 500
@@ -31,8 +38,19 @@ export const list = async ctx => {
 }
 export const create = async ctx => {
   try {
+    const saltRounds = 10
+
+    const hashedPassword = await bcrypt.hash(
+      ctx.request.body.password,
+      saltRounds
+    )
+
     const user = await prisma.user.create({
-      data: ctx.request.body,
+      data: {
+        name: ctx.request.body.name,
+        email: ctx.request.body.email,
+        password: hashedPassword,
+      },
     })
     ctx.body = user
   } catch (err) {
