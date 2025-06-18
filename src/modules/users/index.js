@@ -3,44 +3,45 @@ import bcrypt from 'bcrypt'
 
 import { prisma } from '~/data'
 
-export const login = async ctx => {
-  console.log(
-    ctx.request.headers.authorization,
-    'Authorization header received'
-  )
-  const [type, credentials] = ctx.headers.authorization.split(' ')
-  if (type !== 'Basic') {
-    ctx.status = 401
-    return
-  }
-  try {
-    console.log('Login: Corpo da requisição recebido:', ctx.request.body)
-    const [email, password] = Buffer.from(credentials, 'base64')
-      .toString()
-      .split(':')
+import { decodeBasicToken } from './services'
 
+export const login = async ctx => {
+  let email, password
+  try {
+    ;[email, password] = decodeBasicToken(ctx.headers.authorization)
+  } catch (error) {
+    ctx.status = 401
+    ctx.body = { message: 'Invalid authorization header format' }
+    console.log('Error decoding basic token:', error)
+  }
+
+  try {
     const user = await prisma.user.findUnique({
       where: { email },
     })
 
     if (!user) {
       ctx.status = 404
+      ctx.body = { message: 'User not found' }
       return
     }
 
     const passwordEqual = await bcrypt.compare(password, user.password)
     if (!passwordEqual) {
       ctx.status = 401
-      ctx.body = 'Invalid credentials'
+      ctx.body = { message: 'Invalid credentials' }
       return
     }
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (error) {
-    console.log('JWT_SECRET carregado:', process.env.JWT_SECRET)
+    if (error.custom) {
+      ctx.status = 400
+      return
+    }
     ctx.status = 500
-    ctx.body = 'user login error'
+    ctx.body = { message: 'Internal server error' }
     return
   }
 }
@@ -52,7 +53,7 @@ export const list = async ctx => {
     ctx.body = users
   } catch (error) {
     ctx.status = 500
-    ctx.body = 'List users error'
+    ctx.body = { message: 'Failed to retrieve users' }
     return
   }
 }
