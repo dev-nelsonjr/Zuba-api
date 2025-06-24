@@ -1,6 +1,6 @@
 import { decodeBasicToken } from './services'
 
-describe('User Module Tests', () => {
+describe('User services', () => {
   it('should return credential by basic athentication token ', () => {
     //prepare
     const email = 'nelson@gmail.com'
