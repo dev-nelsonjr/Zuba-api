@@ -6,15 +6,16 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "db:migrate": "yarn prisma migrate dev --preview-feature",
     "fix": "run-s \"fix:* {@}\" --",
     "prepare": "husky",
     "fix:lint": "eslint --fix --no-error-on-unmatched-pattern",
     "fix:format": "prettier --write",
-    "format": "yarn fix:format 'src/**/*.(js|ts|md|json')",
+    "format": "yarn fix:format 'src/**/*.{js,ts,md,json}'",
     "lint": "yarn fix:lint 'src/**/*.(js|ts|md|json')",
     "prebuild": "rm -Rf ./dist",
     "build": "babel src --extensions \".js\" --ignore \"*.spec.js,*.test.js\" --out-dir dist --copy-files",
-    "dev": "nodemon --exec babel-node src/index.js -- -r dotenv/config src/index.js",
+    "dev": "nodemon --exec babel-node src/index.js -- -r dotenv-safe/config src/index.js",
     "test": "yarn jest"
   },
   "commitlint": {
