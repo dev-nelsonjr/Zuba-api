@@ -2,9 +2,9 @@ import request from 'supertest'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-import { prisma } from '~/data'
+import { prisma } from '../src/data'
 
-import { app } from './server-setup'
+import { app } from './server-setup.js'
 
 const server = app.listen()
 
@@ -23,10 +23,10 @@ describe("users routes", () => {
       const password = '123456'
 
     //execute
-     const result = await request(server).get('/login').auth(email, password)
+     const result = await request(server).post('/login').auth(email, password)
 
     // expectation
-     expect(result.status).toBe(404)
+     expect(result.status).toBe(401)
 
   })})
 
@@ -36,10 +36,10 @@ describe("users routes", () => {
       const password = 'wrong'
 
     //execute
-     const result = await request(server).get('/login').auth(email, password)
+     const result = await request(server).post('/login').auth(email, password)
 
     // expectation
-      expect(result.status).toBe(404)
+      expect(result.status).toBe(401)
 
   })
 
@@ -49,7 +49,6 @@ describe("users routes", () => {
       const password = '123456'
 
       const saltRounds = 10
-
       const hashedPassword = await bcrypt.hash( password, saltRounds )
 
       const user = await prisma.user.create({
@@ -57,14 +56,14 @@ describe("users routes", () => {
       })
 
     //execute
-     const result = await request(server).get('/login').auth(email, password)
+     const result = await request(server).post('/login').auth(email, password)
      const decodedToken = jwt.verify(result.body.token, process.env.JWT_SECRET)
 
     // expectation
      expect(result.status).toBe(200)
      expect(result.body.user).toBeTruthy()
      expect(result.body.token).toBeTruthy()
-     expect(result.body.user.id).toBeTruthy()
+     expect(result.body.user.id).toBe(user.id)
      expect(result.body.user.email).toBe(email)
      expect(result.body.user.password).toBeFalsy()
 
