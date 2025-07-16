@@ -1,47 +1,48 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
-import { prisma } from '../../data/index.js'
-import { decodeBasicToken } from './services.js'
-import './model.js'
+import { decodeBasicToken } from './services'
+import * as model from './model'
 
 export const login = async ctx => {
-  let email, password
   try {
-    ;[email, password] = decodeBasicToken(ctx.request.headers.authorization)
+    const [email, password] = decodeBasicToken(
+      ctx.request.headers.authorization
+    )
 
-    const user = await prisma.user.findUnique({
-      where: { email, password: password },
+    const user = await model.findUnique({
+      where: { email, password },
     })
 
     if (!user) {
-      ctx.status = 401
-      ctx.body = { message: 'Invalid credentials' }
+      ctx.status = 404
       return
     }
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (error) {
+    console.log(error)
+
     if (error.custom) {
-      ctx.status = 401
-      ctx.body = { message: error.message }
+      ctx.status = 400
       return
     }
+
     ctx.status = 500
-    ctx.body = { message: 'Internal server error' }
+    ctx.body = 'Internal Server Error'
     return
   }
 }
 
 export const list = async ctx => {
   try {
-    const users = await prisma.user.findMany()
-
+    const users = await model.findMany()
     ctx.body = users
-  } catch (error) {
+  } catch (err) {
     ctx.status = 500
-    ctx.body = { message: 'Failed to retrieve users' }
+    ctx.body = 'Internal Server Error'
+
     return
   }
 }
@@ -50,67 +51,54 @@ export const create = async ctx => {
   try {
     const saltRounds = 10
 
-    const { name, email, password } = ctx.request.body
+    const hashedPassword = await bcrypt
+      .hash(ctx.request.body.password, saltRounds)
+      .then()
 
-    if (!email || !password) {
-      ctx.status = 400
-      ctx.body = { message: 'Email and password are required.' }
-      return
-    }
-
-    const hashedPassword = await bcrypt.hash(
-      password,
-      saltRounds
-    )
-
-    const user = await prisma.user.create({
+    const user = await model.create({
       data: {
-        name: name,
-        email: email,
+        name: ctx.request.body.name,
+        email: ctx.request.body.email,
         password: hashedPassword,
       },
     })
+
     ctx.body = user
   } catch (err) {
-    console.error('User creation error:', err)
     ctx.status = 500
-    ctx.body = { message: 'User creation error' }
+    ctx.body = 'Internal Server Error'
+
     return
   }
 }
 
 export const update = async ctx => {
+  const { name, email } = ctx.request.body
+
   try {
-    const { name, email, password } = ctx.request.body
-
-    const dataToUpdate = {};
-    if (name) dataToUpdate.name = name;
-    if (email) dataToUpdate.email = email;
-    if (password) dataToUpdate.password = await bcrypt.hash(password, 10)
-
-    const user = await prisma.user.update({
+    const user = await model.update({
       where: { id: ctx.params.id },
-      data: dataToUpdate,
+      data: { name, email },
     })
+
     ctx.body = user
-  } catch (err) {
-    console.error('User update error:', err)
+  } catch {
     ctx.status = 500
-    ctx.body = { message: 'User update error' }
+    ctx.body = 'Internal Server Error'
+
     return
   }
 }
 
 export const remove = async ctx => {
   try {
-    const user = await prisma.user.delete({
+    await model.remove({
       where: { id: ctx.params.id },
     })
-    ctx.body = { id: ctx.params.id, message: 'User deleted successfully' }
-  } catch (err) {
-    console.error('User deletion error:', err)
+
+    ctx.body = { id: ctx.params.id }
+  } catch {
     ctx.status = 500
-    ctx.body = { message: 'User deletion error' }
-    return
+    ctx.body = 'Internal Server Error'
   }
 }
