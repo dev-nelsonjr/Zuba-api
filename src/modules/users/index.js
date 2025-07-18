@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
-import { decodeBasicToken } from './services'
 import * as model from './model'
+import { decodeBasicToken } from './services'
 
 export const login = async ctx => {
   try {

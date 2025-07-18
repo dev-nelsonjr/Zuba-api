@@ -7,11 +7,12 @@ import { app } from './server-setup'
 
 const server = app.listen()
 
-describe('User routes', () => {
-  beforeEach(async () => {
-    await prisma.user.deleteMany({})
-  })
+beforeEach(async () => {
+  await prisma.transaction.deleteMany({})
+  await prisma.user.deleteMany({})
+})
 
+describe('User routes', () => {
   it('should return not found with wrong password', async () => {
     //setup
     const email = 'test@test.com'
@@ -61,4 +62,20 @@ describe('User routes', () => {
 
     expect(decodedToken.sub).toBe(user.id)
   })
+})
+
+describe('Transaction routes', () => {
+  
+  it('should throw error when try create transaction without auth', async() => {
+    const res = await request(server).post('/transactions').send({
+      description: 'test Transaction',
+      value: 10.05,
+    })
+
+    expect(res.status).toBe(401)
+  })
+
+  it.todo('should create transaction to logged in user')
+
+  it.todo('should throw error when try create transaction without value')
 })

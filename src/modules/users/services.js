@@ -30,7 +30,6 @@ export const decodeBasicToken = basicToken => {
   }
 
   const decoded = Buffer.from(credentials, 'base64').toString()
-
   const encoded = Buffer.from(decoded, 'utf8').toString('base64')
 
   if (encoded !== credentials) {
