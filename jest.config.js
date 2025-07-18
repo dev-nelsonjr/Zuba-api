@@ -1,7 +1,7 @@
 import 'dotenv-safe/config.js'
 import { execSync } from 'child_process'
 
-process.env.DB_URL = `${process.env.DB_URL}_testdb02?schema=test_schema`
+process.env.DB_URL = `${process.env.DB_URL}_testdb03?schema=test_schema`
 
 execSync('yarn prisma migrate deploy')
 
