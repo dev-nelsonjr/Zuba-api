@@ -62,3 +62,4 @@ router.put('/users/:id', authCheck, users.update)
 router.delete('/users/:id', authCheck, users.remove)
 
 router.post('/transactions', authCheck, transactions.create)
+router.get('/transactions', authCheck, transactions.list)

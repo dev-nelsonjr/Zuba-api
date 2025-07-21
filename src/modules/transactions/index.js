@@ -21,3 +21,13 @@ ctx.body = transaction
   return Promise.reject(error)
 }
 }
+
+export const list = ctx => {
+  const transactions = model.findMany({
+  where: {
+    userId: ctx.auth.user.id
+  }
+})
+
+ctx.body = transactions
+}
