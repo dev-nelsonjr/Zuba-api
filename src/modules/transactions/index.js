@@ -21,3 +21,34 @@ ctx.body = transaction
   return Promise.reject(error)
 }
 }
+
+export const list = async ctx => {
+  try {
+    const transactions = await model.findMany({
+      where: {
+        userId: ctx.auth.user.id
+      }
+    })
+    ctx.body = transactions
+  } catch (error) {
+    console.error(error)
+    ctx.status = 500;
+    ctx.body = { message: 'internal server error' };
+  }
+}
+
+
+export const update = async ctx => {
+  const transaction = await model.update({
+    where: {
+       id: ctx.params.id,
+       userId: ctx.auth.user.id
+      },
+    data: {
+      description: ctx.request.body.description,
+      value: parseFloat(ctx.request.body.value),
+      },
+  })
+
+  ctx.body = transaction
+}
