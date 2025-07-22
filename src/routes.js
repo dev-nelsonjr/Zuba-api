@@ -54,12 +54,11 @@ router.get('/', ctx => {
 
 // Auth
 router.post('/login', users.login)
-router.post('/users', users.create)
+router.post('/signup', users.signup)
 
-// Users
-router.get('/users', authCheck, users.list)
-router.put('/users/:id', authCheck, users.update)
-router.delete('/users/:id', authCheck, users.remove)
+// Users (account)
+router.put('/profile', authCheck, users.update)
+router.delete('/profile', authCheck, users.remove)
 
 router.post('/transactions', authCheck, transactions.create)
 router.get('/transactions', authCheck, transactions.list)
