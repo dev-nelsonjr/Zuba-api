@@ -27,6 +27,7 @@ export const decodeBasicToken = basicToken => {
   if (type !== 'Basic') {
     throw new TokenTypeError()
   }
+  
   const decoded = Buffer.from(credentials, 'base64').toString()
   const endocded = Buffer.from(decoded, 'utf8').toString('base64')
 

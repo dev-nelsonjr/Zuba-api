@@ -1,43 +1,31 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
-import { prisma } from '~/data'
-import { decodeBasicToken } from './services'
-import './model'
+import { prisma } from '../../data/index.js'
+import { decodeBasicToken } from './services.js'
+import './model.js'
 
 export const login = async ctx => {
   let email, password
   try {
-    [email, password] = decodeBasicToken(ctx.headers.authorization)
-  } catch (error) {
-    ctx.status = 401
-    ctx.body = { message: 'Invalid authorization header format' }
-    console.log('Error decoding basic token:', error)
-  }
+    ;[email, password] = decodeBasicToken(ctx.request.headers.authorization)
 
-  try {
-   const user = await prisma.user.findUnique({
-  where: { email, password },
-})
+    const user = await prisma.user.findUnique({
+      where: { email, password: password },
+    })
 
-if (!user) {
-  ctx.status = 404
-  ctx.body = { message: 'User not found or invalid credentials' }
-  return
-}
-
-    // const passwordEqual = await bcrypt.compare(password, user.password)
-    // if (!passwordEqual) {
-    //   ctx.status = 404
-    //   ctx.body = { message: 'Invalid credentials' }
-    //   return
-    // }
+    if (!user) {
+      ctx.status = 401
+      ctx.body = { message: 'Invalid credentials' }
+      return
+    }
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (error) {
     if (error.custom) {
-      ctx.status = 400
+      ctx.status = 401
+      ctx.body = { message: error.message }
       return
     }
     ctx.status = 500
@@ -57,43 +45,62 @@ export const list = async ctx => {
     return
   }
 }
+
 export const create = async ctx => {
   try {
     const saltRounds = 10
 
+    const { name, email, password } = ctx.request.body
+
+    if (!email || !password) {
+      ctx.status = 400
+      ctx.body = { message: 'Email and password are required.' }
+      return
+    }
+
     const hashedPassword = await bcrypt.hash(
-      ctx.request.body.password,
+      password,
       saltRounds
     )
 
     const user = await prisma.user.create({
       data: {
-        name: ctx.request.body.name,
-        email: ctx.request.body.email,
+        name: name,
+        email: email,
         password: hashedPassword,
       },
     })
     ctx.body = user
   } catch (err) {
+    console.error('User creation error:', err)
     ctx.status = 500
-    ctx.body = 'User creation error'
+    ctx.body = { message: 'User creation error' }
     return
   }
 }
+
 export const update = async ctx => {
   try {
     const { name, email, password } = ctx.request.body
+
+    const dataToUpdate = {};
+    if (name) dataToUpdate.name = name;
+    if (email) dataToUpdate.email = email;
+    if (password) dataToUpdate.password = await bcrypt.hash(password, 10)
+
     const user = await prisma.user.update({
       where: { id: ctx.params.id },
-      data,
+      data: dataToUpdate,
     })
     ctx.body = user
   } catch (err) {
+    console.error('User update error:', err)
     ctx.status = 500
-    ctx.body = 'User update error'
+    ctx.body = { message: 'User update error' }
     return
   }
 }
+
 export const remove = async ctx => {
   try {
     const user = await prisma.user.delete({
@@ -101,8 +108,9 @@ export const remove = async ctx => {
     })
     ctx.body = { id: ctx.params.id, message: 'User deleted successfully' }
   } catch (err) {
+    console.error('User deletion error:', err)
     ctx.status = 500
-    ctx.body = 'user deletion error'
+    ctx.body = { message: 'User deletion error' }
     return
   }
 }

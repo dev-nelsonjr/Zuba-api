@@ -1,9 +1,10 @@
 import Router from 'koa-router'
-import * as users from './modules/users'
+import * as users from './modules/users/index.js'
+
 export const router = new Router()
 
 //Auth
-router.get('/login', users.login)
+router.post('/login', users.login)
 
 // User routes
 router.get('/users', users.list)
