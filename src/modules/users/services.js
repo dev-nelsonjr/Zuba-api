@@ -1,20 +1,20 @@
-class TokenTypeError extends Error {
-  constructor(message = 'Invalid token type') {
+export class TokenTypeError extends Error {
+  constructor(message = 'Wrong token type') {
     super()
     this.message = message
     this.custom = true
   }
 }
 
-class Base64EncodedError extends Error {
-  constructor(message = 'Wrong credentials is not correct encodedclea') {
+export class EncodedError extends Error {
+  constructor(message = 'Wrong credentials is not correct encoded') {
     super()
     this.message = message
     this.custom = true
   }
 }
 
-class BadCredentialError extends Error {
+export class BadCredentialsError extends Error {
   constructor(message = 'Wrong credentials format') {
     super()
     this.message = message
@@ -24,19 +24,22 @@ class BadCredentialError extends Error {
 
 export const decodeBasicToken = basicToken => {
   const [type, credentials] = basicToken.split(' ')
+
   if (type !== 'Basic') {
     throw new TokenTypeError()
   }
-  
-  const decoded = Buffer.from(credentials, 'base64').toString()
-  const endocded = Buffer.from(decoded, 'utf8').toString('base64')
 
-  if (endocded !== credentials) {
-    throw new Base64EncodedError()
+  const decoded = Buffer.from(credentials, 'base64').toString()
+
+  const encoded = Buffer.from(decoded, 'utf8').toString('base64')
+
+  if (encoded !== credentials) {
+    throw new EncodedError()
   }
 
   if (decoded.indexOf(':') === -1) {
-    throw new BadCredentialError()
+    throw new BadCredentialsError()
   }
+
   return decoded.split(':')
 }

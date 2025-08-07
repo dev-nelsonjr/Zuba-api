@@ -1,14 +1,19 @@
-import Koa from 'koa'
+import koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import cors from '@koa/cors' 
-import { router } from './routes.js'
+import swagger from 'swagger-injector'
 
-const app = new Koa()
+import { router } from './routes'
+
+const app = new koa()
 
 app.use(bodyParser())
-app.use(cors())
-
 app.use(router.routes())
 app.use(router.allowedMethods())
+
+app.use(
+  swagger.koa({
+  path: `${__dirname}/../DOCS/openapi.json`,
+  })
+)
 
 export { app }
