@@ -28,10 +28,10 @@ describe('User services', () => {
     const result = () => decodeBasicToken(basicToken)
 
     //expectation
-    expect(result).toThrowError('Wrong token type')
+    expect(result).toThrow('Wrong token type')
   })
 
-  it('should throw new error when credentials is not on correc format', () => {
+  it('should throw a new error when credentials are not in the correct format', () => {
     // prepare
     const email = 'test@test.com'
     const password = '1234'
@@ -43,7 +43,7 @@ describe('User services', () => {
     const result = () => decodeBasicToken(basicToken)
 
     //expectation
-    expect(result).toThrowError('Wrong credentials format')
+    expect(result).toThrow('Wrong credentials format')
   })
 
   it('should throw new error when credentials is not base64 encoded', () => {
@@ -58,6 +58,6 @@ describe('User services', () => {
     const result = () => decodeBasicToken(basicToken)
 
     //expectation
-    expect(result).toThrowError('Wrong credentials is not correct encoded')
+    expect(result).toThrow('Wrong credentials is not correct encoded')
   })
 })
