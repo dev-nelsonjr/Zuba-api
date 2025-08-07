@@ -6,13 +6,39 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+enum Recurrence {
+  weekly
+  monthly
+  yearly
+}
+
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
+  id          String        @id @default(cuid())
+  name        String?
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+
+  transaction Transaction[]
+
   @@map("users")
+}
+
+model Transaction {
+  id          String @id @default(cuid())
+  userId      String
+  description String
+  value Float
+  recurrence Recurrence?
+  installments Int?
+  isSubscription Boolean?
+  dueDate DateTime?
+  resolved Boolean @default(false)
+
+  user        User   @relation(fields: [userId], references: [id])
+
+  @@map("transactions")
 }

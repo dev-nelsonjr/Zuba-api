@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "db:migrate": "yarn prisma migrate dev --preview-feature",
+    "db:migrate": "yarn prisma migrate dev",
     "prepare": "husky",
     "fix": "run-s \"lint:fix {@}\" \"format:write {@}\" --",
     "lint:fix": "eslint --fix --no-error-on-unmatched-pattern",
