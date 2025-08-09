@@ -22,7 +22,7 @@ model User {
   updatedAt   DateTime      @updatedAt
   deletedAt   DateTime?
 
-  transaction Transaction[]
+  transactions Transaction[]
 
   @@map("users")
 }
