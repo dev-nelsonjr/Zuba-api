@@ -1,4 +1,4 @@
-export class TokenTypeError extends Error {
+class TokenTypeError extends Error {
   constructor(message = 'Wrong token type') {
     super()
     this.message = message
@@ -6,7 +6,7 @@ export class TokenTypeError extends Error {
   }
 }
 
-export class EncodedError extends Error {
+class EncodedError extends Error {
   constructor(message = 'Wrong credentials is not correct encoded') {
     super()
     this.message = message
@@ -14,7 +14,7 @@ export class EncodedError extends Error {
   }
 }
 
-export class BadCredentialsError extends Error {
+class BadCredentialsError extends Error {
   constructor(message = 'Wrong credentials format') {
     super()
     this.message = message

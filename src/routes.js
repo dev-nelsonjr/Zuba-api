@@ -1,5 +1,7 @@
 import Router from 'koa-router'
 
+import { authCheck } from './middlewares/auth-check'
+
 import * as users from './modules/users'
 import * as transactions from './modules/transactions'
 
@@ -52,11 +54,11 @@ router.get('/', ctx => {
 
 // Auth
 router.post('/login', users.login)
+router.post('/users', users.create)
 
 // Users
-router.get('/users', users.list)
-router.post('/users', users.create)
-router.put('/users/:id', users.update)
-router.delete('/users/:id', users.remove)
+router.get('/users', authCheck, users.list)
+router.put('/users/:id', authCheck, users.update)
+router.delete('/users/:id', authCheck, users.remove)
 
-router.post('/transactions', transactions.create)
+router.post('/transactions', authCheck, transactions.create)
