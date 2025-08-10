@@ -65,9 +65,11 @@ describe('User routes', () => {
 })
 
 describe('Transaction routes', () => {
-  
+
   it('should throw error when try create transaction without auth', async() => {
-    const res = await request(server).post('/transactions').send({
+    const res = await request(server)
+    .post('/transactions')
+    .send({
       description: 'test Transaction',
       value: 10.05,
     })
@@ -75,7 +77,35 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(401)
   })
 
-  it.todo('should create transaction to logged in user')
+  it('should create transaction to logged in user', async() => {
+   const transactionData = {
+      description: 'test Transaction',
+      value: 10.05,
+    }
+
+    const email = 'test2@test.com'
+    const password = '1234'
+
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds).then()
+
+    const user = await prisma.user.create({
+      data: { email, password: hashedPassword },
+    })
+
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+
+    const res = await request(server)
+    .post('/transactions')
+    .set('Authorization', `Bearer ${token}`)
+    .send(transactionData)
+
+    expect(res.status).toBe(200)
+    expect(res.body.id).toBeTruthy()
+    expect(res.body.description).toBe(transactionData.description)
+    expect(res.body.value).toBe(transactionData.value)
+    expect(res.body.userId).toBe(user.id)
+  })
 
   it.todo('should throw error when try create transaction without value')
 })
