@@ -43,7 +43,7 @@ describe('User routes', () => {
     const password = '1234'
 
     const saltRounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltRounds).then()
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     const user = await prisma.user.create({
       data: { email, password: hashedPassword },
@@ -83,11 +83,11 @@ describe('Transaction routes', () => {
       value: 10.05,
     }
 
-    const email = 'test2@test.com'
+    const email = 'test@test.com'
     const password = '1234'
 
     const saltRounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltRounds).then()
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     const user = await prisma.user.create({
       data: { email, password: hashedPassword },
@@ -107,5 +107,45 @@ describe('Transaction routes', () => {
     expect(res.body.userId).toBe(user.id)
   })
 
-  it.todo('should throw error when try create transaction without value')
+  it('should throw error when try create transaction without value', async() => {
+    const email = 'test@test.com'
+    const password = '1234'
+
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+    const user = await prisma.user.create({
+      data: { email, password: hashedPassword },
+    })
+
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+
+    const res = await request(server)
+    .post('/transactions')
+    .set('Authorization', `Bearer ${token}`)
+    .send({description: 'No way'})
+
+    expect(res.status).toBe(400)
+  })
+
+  it('should throw error when try create transaction without description', async() => {
+    const email = 'test@test.com'
+    const password = '1234'
+
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+    const user = await prisma.user.create({
+      data: { email, password: hashedPassword },
+    })
+
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+
+    const res = await request(server)
+    .post('/transactions')
+    .set('Authorization', `Bearer ${token}`)
+    .send({value: 10.05})
+
+    expect(res.status).toBe(400)
+  })
 })
