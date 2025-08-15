@@ -1,0 +1,406 @@
+{
+  "type": "collection.insomnia.rest/5.0",
+  "name": "Zuba API",
+  "meta": {
+    "id": "wrk_badf86c2faa64de2aa3c7395036c88f2",
+    "created": 1753130658803,
+    "modified": 1753143315109,
+    "description": ""
+  },
+  "collection": [
+    {
+      "name": "Users",
+      "meta": {
+        "id": "fld_5bf64824e3a9420da4b4e313e280b8a5",
+        "created": 1753130846938,
+        "modified": 1753130846938,
+        "sortKey": -1753130846938,
+        "description": ""
+      },
+      "children": [
+        {
+          "url": "{{ _['/'].host }}/users/cmddpjd760001w680alyr8j9c",
+          "name": "delete",
+          "meta": {
+            "id": "req_c718cc044de54000abbbfdcbc734524e",
+            "created": 1753131376662,
+            "modified": 1753140579247,
+            "isPrivate": false,
+            "description": "",
+            "sortKey": -1753131560266
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.2.0",
+              "id": "pair_b9b559d3bc864c4cb0e719a9c18881e4"
+            },
+            {
+              "id": "pair_42947242ca334a858ba1545137eb6648",
+              "name": "Authorization",
+              "value": "Bearer {{jwt_token}}",
+              "description": "",
+              "disabled": false
+            }
+          ],
+          "scripts": {
+            "preRequest": ""
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "{{ _['/'].host }}/users/cmddlf3bo0000w684qpwuikt1",
+          "name": "update",
+          "meta": {
+            "id": "req_e28990bb02504011ab588bd0ba6babeb",
+            "created": 1753131390402,
+            "modified": 1753138052834,
+            "isPrivate": false,
+            "description": "",
+            "sortKey": -1753131560466
+          },
+          "method": "PUT",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"name\": \"teass\",\n  \"email\": \"teass@teass.com\",\n  \"password\": \"1234\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json",
+              "id": "pair_a500812f80ad4e70a86856bf99404d5c"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.2.0",
+              "id": "pair_d24c1098ec4948328fc68fbc03cb5629"
+            },
+            {
+              "id": "pair_2c803578183544b487458c66bf175336",
+              "name": "Authorization",
+              "value": "Bearer {{jwt_token}}",
+              "description": "",
+              "disabled": false
+            }
+          ],
+          "authentication": {
+            "type": "none"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "{{ _['/'].host }}/users",
+          "name": "list",
+          "meta": {
+            "id": "req_e904cf8d8bbe40e8b6dfed5f078c469c",
+            "created": 1753131393082,
+            "modified": 1753138065054,
+            "isPrivate": false,
+            "description": "",
+            "sortKey": -1753131560566
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.2.0",
+              "id": "pair_758bdfb6edb541f78c0d61156a5f1679"
+            },
+            {
+              "id": "pair_ad462a65f99744099abbaa2c48a9f873",
+              "name": "Authorization",
+              "value": "Bearer {{jwt_token}}",
+              "description": "",
+              "disabled": false
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "{{ _['/'].host }}/users",
+          "name": "create",
+          "meta": {
+            "id": "req_79e0a010e61340b6b144f780b17a1d9a",
+            "created": 1753131396047,
+            "modified": 1753138731837,
+            "isPrivate": false,
+            "description": "",
+            "sortKey": -1753131560366
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"name\": \"test50\",\n  \"email\": \"test50@test.com\",\n  \"password\": \"1234\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.2.0",
+              "id": "pair_17126bf8ed364870b538acdb5841db27"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "meta": {
+        "id": "fld_81d9042fee334d7e85d2531a1197fcca",
+        "created": 1753130854162,
+        "modified": 1753130854162,
+        "sortKey": -1753130854162,
+        "description": ""
+      },
+      "children": [
+        {
+          "url": "{{ _['/'].host }}/login",
+          "name": "login",
+          "meta": {
+            "id": "req_4307b28e384f4d6caba4eb8495e649e5",
+            "created": 1753130894897,
+            "modified": 1753140756956,
+            "isPrivate": false,
+            "description": "",
+            "sortKey": -1753131240428
+          },
+          "method": "POST",
+          "headers": [
+            {
+              "id": "pair_73e479c924434f9389b66ff20d10ffd6",
+              "name": "a",
+              "value": "",
+              "description": "",
+              "disabled": false
+            }
+          ],
+          "authentication": {
+            "type": "basic",
+            "useISO88591": false,
+            "disabled": false,
+            "username": "test50@test.com",
+            "password": "1234"
+          },
+          "scripts": {
+            "preRequest": ""
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "meta": {
+        "id": "fld_e24dd42e1f4249cc8c238a76aae96d4e",
+        "created": 1753130868612,
+        "modified": 1753130868612,
+        "sortKey": -1753130868612,
+        "description": ""
+      }
+    },
+    {
+      "url": "{{ _['/'].host }}/transactions",
+      "name": "List Transaction",
+      "meta": {
+        "id": "req_c3d4622c37ba4a208cf20c019dc2267a",
+        "created": 1753132462245,
+        "modified": 1753138219308,
+        "isPrivate": false,
+        "description": "",
+        "sortKey": -1753132462245
+      },
+      "method": "GET",
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/11.2.0",
+          "id": "pair_a2db9f610cbb4306bb980cc6556cd9ef"
+        },
+        {
+          "id": "pair_11a737c03d5b4ba0976caf534013d9f5",
+          "name": "Authorization",
+          "value": "Bearer {{jwt_token}}",
+          "description": "",
+          "disabled": false
+        }
+      ],
+      "settings": {
+        "renderRequestBody": true,
+        "encodeUrl": true,
+        "followRedirects": "global",
+        "cookies": {
+          "send": true,
+          "store": true
+        },
+        "rebuildPath": true
+      }
+    },
+    {
+      "url": "{{ _['/'].host }}/transactions/cmddqrqyh0003w680m8gd98ea",
+      "name": "Update Transaction",
+      "meta": {
+        "id": "req_f14e1641be754f0ba512be34352a58ec",
+        "created": 1753132468455,
+        "modified": 1753143253161,
+        "isPrivate": false,
+        "description": "",
+        "sortKey": -1753132468455
+      },
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"description\": \"Updated tests for testa\",\n  \"value\": 88.00\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_2dd7591d69f341158a129b44d2036c6c"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/11.2.0",
+          "id": "pair_80a27493abca45f2adff42156cfdbd77"
+        },
+        {
+          "id": "pair_58ae59f45d1049b6a574df52c123693f",
+          "name": "Authorization",
+          "value": "Bearer {{jwt_token}}",
+          "description": "",
+          "disabled": false
+        }
+      ],
+      "settings": {
+        "renderRequestBody": true,
+        "encodeUrl": true,
+        "followRedirects": "global",
+        "cookies": {
+          "send": true,
+          "store": true
+        },
+        "rebuildPath": true
+      }
+    },
+    {
+      "url": "{{ _['/'].host }}/transactions",
+      "name": "Create Transaction",
+      "meta": {
+        "id": "req_3940286d69e445598745012544f15ba0",
+        "created": 1753132470551,
+        "modified": 1753138837983,
+        "isPrivate": false,
+        "description": "",
+        "sortKey": -1753132470551
+      },
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"description\": \"Tests\",\n  \"value\": 25.00\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/11.2.0",
+          "id": "pair_6ed741f4cbf442caba0d5aa861177185"
+        },
+        {
+          "id": "pair_50a28c784ef94d2f8cd9c49c8c43c74f",
+          "name": "Authorization",
+          "value": "Bearer {{jwt_token}}",
+          "description": "",
+          "disabled": false
+        }
+      ],
+      "authentication": {
+        "type": "none"
+      },
+      "settings": {
+        "renderRequestBody": true,
+        "encodeUrl": true,
+        "followRedirects": "global",
+        "cookies": {
+          "send": true,
+          "store": true
+        },
+        "rebuildPath": true
+      }
+    }
+  ],
+  "cookieJar": {
+    "name": "Default Jar",
+    "meta": {
+      "id": "jar_f23c2a92122ab068e3ac954948116895f9671b0b",
+      "created": 1753130658808,
+      "modified": 1753130658808
+    }
+  },
+  "environments": {
+    "name": "Base Environment",
+    "meta": {
+      "id": "env_f23c2a92122ab068e3ac954948116895f9671b0b",
+      "created": 1753130658806,
+      "modified": 1753140785740,
+      "isPrivate": false
+    },
+    "data": {
+      "/": {
+        "host": "http://localhost:9901"
+      },
+      "jwt_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWRkcGpkNzYwMDAxdzY4MGFseXI4ajljIiwiaWF0IjoxNzUzMTM4NzY5fQ.kTH32FyOAnPPdBefTtfY7hoRXx3tg9GsCBcbo8UcEQA"
+    }
+  }
+}
