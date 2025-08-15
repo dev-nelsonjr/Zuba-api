@@ -39,7 +39,7 @@ export const list = async ctx => {
 
 
 export const update = async ctx => {
-  const transaction = await model.update({
+  const transaction = await model.updateMany({
     where: {
        id: ctx.params.id,
        userId: ctx.auth.user.id
@@ -51,4 +51,15 @@ export const update = async ctx => {
   })
 
   ctx.body = transaction
+}
+
+export const remove = async ctx => {
+  await model.removeMany({
+    where: {
+      id: ctx.params.id,
+      userId: ctx.auth.user.id
+    }
+  })
+
+  ctx.body = { id: ctx.params.id }
 }
