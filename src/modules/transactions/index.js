@@ -37,7 +37,6 @@ export const list = async ctx => {
   }
 }
 
-
 export const update = async ctx => {
   const transaction = await model.updateMany({
     where: {
