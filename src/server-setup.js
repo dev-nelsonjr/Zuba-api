@@ -14,7 +14,7 @@ app.use(router.allowedMethods())
 
 app.use(
   swagger.koa({
-  path: `${__dirname}/../DOCS/openapi.json`,
+    path: `${__dirname}/../DOCS/openapi.json`,
   })
 )
 

@@ -12,7 +12,7 @@ export const findUnique = async params => {
 
   const result = await prisma.user.findUnique({
     ...params,
-    where
+    where,
   })
 
   if (!result || !passwordPlainText) {

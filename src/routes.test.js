@@ -65,11 +65,8 @@ describe('User routes', () => {
 })
 
 describe('Transaction routes', () => {
-
-  it('should throw error when try create transaction without auth', async() => {
-    const res = await request(server)
-    .post('/transactions')
-    .send({
+  it('should throw error when try create transaction without auth', async () => {
+    const res = await request(server).post('/transactions').send({
       description: 'test Transaction',
       value: '10.05',
     })
@@ -77,8 +74,8 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(401)
   })
 
-  it('should create transaction to logged in user', async() => {
-   const transactionData = {
+  it('should create transaction to logged in user', async () => {
+    const transactionData = {
       description: 'test Transaction',
       value: '10.05',
     }
@@ -96,9 +93,9 @@ describe('Transaction routes', () => {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 
     const res = await request(server)
-    .post('/transactions')
-    .set('Authorization', `Bearer ${token}`)
-    .send(transactionData)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send(transactionData)
 
     expect(res.status).toBe(200)
     expect(res.body.id).toBeTruthy()
@@ -107,7 +104,7 @@ describe('Transaction routes', () => {
     expect(res.body.userId).toBe(user.id)
   })
 
-  it('should throw error when try create transaction without value', async() => {
+  it('should throw error when try create transaction without value', async () => {
     const email = 'test@test.com'
     const password = '1234'
 
@@ -121,14 +118,14 @@ describe('Transaction routes', () => {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 
     const res = await request(server)
-    .post('/transactions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({description: 'No way'})
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ description: 'No way' })
 
     expect(res.status).toBe(400)
   })
 
-  it('should throw error when try create transaction without description', async() => {
+  it('should throw error when try create transaction without description', async () => {
     const email = 'test@test.com'
     const password = '1234'
 
@@ -142,9 +139,9 @@ describe('Transaction routes', () => {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
 
     const res = await request(server)
-    .post('/transactions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({value: '10.05'})
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ value: '10.05' })
 
     expect(res.status).toBe(400)
   })

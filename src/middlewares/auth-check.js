@@ -9,7 +9,7 @@ export const decodeBearerToken = bearerToken => {
   const [type, token] = bearerToken.split(' ')
 
   if (type !== 'Bearer') {
-     return false
+    return false
   }
 
   return jwt.verify(token, process.env.JWT_SECRET)
@@ -19,18 +19,18 @@ export const authCheck = async (ctx, next) => {
   const decodedToken = decodeBearerToken(ctx.headers.authorization)
 
   if (!decodedToken?.sub) {
-   ctx.status = 401
-   return
+    ctx.status = 401
+    return
   }
 
   const user = await userModel.findUnique({
-   where: { id: decodedToken.sub },
+    where: { id: decodedToken.sub },
   })
 
-  if(user){
+  if (user) {
     ctx.auth = { user }
     return next()
   }
 
   ctx.status = 401
- }
+}
