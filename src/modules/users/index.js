@@ -35,19 +35,7 @@ export const login = async ctx => {
   }
 }
 
-export const list = async ctx => {
-  try {
-    const users = await model.findMany()
-    ctx.body = users
-  } catch (err) {
-    ctx.status = 500
-    ctx.body = 'Internal Server Error'
-
-    return
-  }
-}
-
-export const create = async ctx => {
+export const signup = async ctx => {
   try {
     const saltRounds = 10
 
@@ -77,7 +65,7 @@ export const update = async ctx => {
 
   try {
     const user = await model.update({
-      where: { id: ctx.params.id },
+      where: { id: ctx.auth.user.id },
       data: { name, email },
     })
 
@@ -93,10 +81,10 @@ export const update = async ctx => {
 export const remove = async ctx => {
   try {
     await model.remove({
-      where: { id: ctx.params.id },
+      where: { id: ctx.auth.user.id },
     })
 
-    ctx.body = { id: ctx.params.id }
+    ctx.body = { id: ctx.auth.user.id }
   } catch {
     ctx.status = 500
     ctx.body = 'Internal Server Error'
