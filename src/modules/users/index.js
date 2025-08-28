@@ -51,7 +51,8 @@ export const signup = async ctx => {
       },
     })
 
-    ctx.body = user
+    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+    ctx.body = { user, token }
   } catch (err) {
     ctx.status = 500
     ctx.body = 'Internal Server Error'
