@@ -12,7 +12,6 @@ beforeEach(async () => {
 })
 
 describe('Transaction routes', () => {
-
   it('should throw error when try create transaction without auth', async () => {
     const res = await request(server).post('/transactions').send({
       description: 'test Transaction',

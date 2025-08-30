@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { omit } from 'ramda'
 import { prisma } from '../../data'
 

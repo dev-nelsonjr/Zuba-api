@@ -2,7 +2,6 @@ import request from 'supertest'
 import jwt from 'jsonwebtoken'
 import { getUserAndToken } from '../../tests/auth'
 
-
 import { prisma } from '../data'
 import { app } from '../server-setup'
 

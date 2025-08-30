@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 import * as model from './model'
 import { decodeBasicToken } from './services'
@@ -39,9 +39,10 @@ export const signup = async ctx => {
   try {
     const saltRounds = 10
 
-    const hashedPassword = await bcrypt
-      .hash(ctx.request.body.password, saltRounds)
-      .then()
+    const hashedPassword = await bcrypt.hash(
+      ctx.request.body.password,
+      saltRounds
+    )
 
     const user = await model.create({
       data: {
@@ -54,6 +55,7 @@ export const signup = async ctx => {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user, token }
   } catch (err) {
+    console.log(err)
     ctx.status = 500
     ctx.body = 'Internal Server Error'
 
