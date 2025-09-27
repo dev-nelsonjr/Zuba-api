@@ -5,11 +5,15 @@ export const create = async ctx => {
   try {
     const transaction = await model.create({
       data: {
+        userId: ctx.auth.user.id,
         description: ctx.request.body.description,
+        dueDate: ctx.request.body.dueDate,
+
+        ...(ctx.request.body.dueDate && { dueDate: ctx.request.body.dueDate }),
+
         ...(ctx.request.body.value && {
           value: parseFloat(ctx.request.body.value),
         }),
-        userId: ctx.auth.user.id,
       },
     })
 
@@ -47,7 +51,11 @@ export const update = async ctx => {
     },
     data: {
       description: ctx.request.body.description,
-      value: parseFloat(ctx.request.body.value),
+      ...(ctx.request.body.value && {
+        value: parseFloat(ctx.request.body.value),
+      }),
+
+      ...(ctx.request.body.dueDate && { dueDate: ctx.request.body.dueDate }),
     },
   })
 
