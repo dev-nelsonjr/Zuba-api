@@ -7,6 +7,10 @@ import { app } from '../server-setup'
 
 const server = app.listen()
 
+afterAll(done => {
+  server.close(done)
+})
+
 beforeEach(async () => {
   await prisma.transaction.deleteMany({})
   await prisma.user.deleteMany({})
