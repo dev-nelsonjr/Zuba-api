@@ -1,3 +1,3 @@
 import { app } from './server-setup'
 
-app.listen(process.env.SERVER_PORT)
+app.listen(process.env.PORT || process.env.SERVER_PORT)
