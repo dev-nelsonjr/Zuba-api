@@ -18,6 +18,7 @@
     "format:all": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "prebuild": "node -e \"require('fs').rmSync('./dist', { recursive: true, force: true })\"",
     "build": "babel src --extensions \".js\" --ignore \"*.spec.js,*.test.js\" --out-dir dist --copy-files",
+    "start": "node -r dotenv/config dist/index.js",
     "predev": "node DOCS/generate.js",
     "dev": "nodemon --exec babel-node -r dotenv-safe/config src/index.js",
     "test": "yarn jest"
