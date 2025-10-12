@@ -7,6 +7,7 @@ execSync('yarn prisma migrate deploy')
 
 export default {
   testEnvironment: 'node',
+  maxWorkers: 1,
   transform: {
 
     '^.+\\.m?js$': ['babel-jest', { configFile: './babel.config.cjs' }],
