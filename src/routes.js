@@ -53,6 +53,10 @@ router.get('/', ctx => {
   ctx.status = 200
 })
 
+router.get('/health', ctx => {
+  ctx.body = { status: 'ok' }
+})
+
 // Auth
 router.post('/login', users.login)
 router.post('/signup', users.signup)
