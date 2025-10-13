@@ -1,8 +1,13 @@
 import admin from 'firebase-admin'
-import serviceAccount from './service-account.json'
+
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+  : null
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  ...(serviceAccount && {
+    credential: admin.credential.cert(serviceAccount),
+  }),
 })
 
 export default admin
