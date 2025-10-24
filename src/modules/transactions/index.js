@@ -29,19 +29,21 @@ export const create = async ctx => {
 }
 
 export const list = async ctx => {
-  try {
-    const transactions = await model.findMany({
-      where: {
-        userId: ctx.auth.user.id,
+  const month = ctx.request.query.month - 1
+
+  const transactions = await model.findMany({
+    where: {
+      userId: ctx.auth.user.id,
+      dueDate: {
+        gte: new Date(2025, month, 1),
+        lt: new Date(2025, month + 1, 1),
       },
-    })
-    ctx.body = transactions
-  } catch (error) {
-    console.error(error)
-    ctx.status = 500
-    ctx.body = { message: 'internal server error' }
-  }
+    },
+  })
+
+  ctx.body = transactions
 }
+
 
 export const update = async ctx => {
   const transaction = await model.updateMany({
