@@ -74,3 +74,7 @@ export const remove = async ctx => {
 
   ctx.body = { id: ctx.params.id }
 }
+
+export const balance = async ctx => {
+  ctx.body = 100000
+}

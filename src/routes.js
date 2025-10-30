@@ -64,3 +64,5 @@ router.post('/transactions', authCheck, transactions.create)
 router.get('/transactions', authCheck, transactions.list)
 router.put('/transactions/:id', authCheck, transactions.update)
 router.delete('/transactions/:id', authCheck, transactions.remove)
+
+router.get('/balance', authCheck, transactions.balance)
