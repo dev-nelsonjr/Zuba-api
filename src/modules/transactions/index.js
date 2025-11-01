@@ -1,18 +1,30 @@
 import { Prisma } from '@prisma/client'
 import * as model from './model'
 
+import * as services from './services'
+
+export const list = async ctx => {
+  const transactions = await services.getListByMonth({
+    month: ctx.request.query.month,
+    userId: ctx.auth.user.id,
+  })
+
+  ctx.body = transactions
+}
+
 export const create = async ctx => {
   try {
     const transaction = await model.create({
       data: {
         userId: ctx.auth.user.id,
         description: ctx.request.body.description,
-        dueDate: ctx.request.body.dueDate,
 
-        ...(ctx.request.body.dueDate && { dueDate: ctx.request.body.dueDate }),
+        ...(ctx.request.body.dueDate && {
+          dueDate: ctx.request.body.dueDate,
+        }),
 
         ...(ctx.request.body.value && {
-          value: parseFloat(ctx.request.body.value),
+          value: ctx.request.body.value,
         }),
       },
     })
@@ -28,23 +40,6 @@ export const create = async ctx => {
   }
 }
 
-export const list = async ctx => {
-  const month = ctx.request.query.month - 1
-
-  const transactions = await model.findMany({
-    where: {
-      userId: ctx.auth.user.id,
-      dueDate: {
-        gte: new Date(2025, month, 1),
-        lt: new Date(2025, month + 1, 1),
-      },
-    },
-  })
-
-  ctx.body = transactions
-}
-
-
 export const update = async ctx => {
   const transaction = await model.updateMany({
     where: {
@@ -54,7 +49,7 @@ export const update = async ctx => {
     data: {
       description: ctx.request.body.description,
       ...(ctx.request.body.value && {
-        value: parseFloat(ctx.request.body.value),
+        value: ctx.request.body.value,
       }),
 
       ...(ctx.request.body.dueDate && { dueDate: ctx.request.body.dueDate }),

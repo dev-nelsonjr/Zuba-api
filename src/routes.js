@@ -4,6 +4,7 @@ import { authCheck } from './middlewares/auth-check'
 
 import * as users from './modules/users'
 import * as transactions from './modules/transactions'
+import { dashboard } from './modules/bff/dashboard'
 
 export const router = new Router()
 
@@ -65,4 +66,5 @@ router.get('/transactions', authCheck, transactions.list)
 router.put('/transactions/:id', authCheck, transactions.update)
 router.delete('/transactions/:id', authCheck, transactions.remove)
 
-router.get('/balance', authCheck, transactions.balance)
+//BFF Routes
+router.get('/dashboard', authCheck, dashboard)
