@@ -1,14 +1,13 @@
 import * as transactionServices from '~/modules/transactions/services'
 
 export const dashboard = async ctx => {
-  const month = ctx.request.query.month - 1
-
-  const transactions = await transactionServices.getListByMonth({
-    month,
+  const where = {
+    month: ctx.request.query.month - 1,
     userId: ctx.auth.user.id,
-  })
+  }
 
-  const monthBalance = transactionServices.balanceCalcByList(transactions)
+  const transactions = await transactionServices.getListByMonth(where)
+  const monthBalance = await transactionServices.getMonthBalance(where)
 
   ctx.body = {
     ...monthBalance,

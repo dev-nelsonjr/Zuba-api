@@ -37,9 +37,7 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(200)
     expect(res.body.id).toBeTruthy()
     expect(res.body.description).toBe(transactionData.description)
-    expect(res.body.value).toBe(
-      `${Math.round(parseFloat(transactionData.value) * 100)}`
-    )
+    expect(res.body.value).toBe(transactionData.value)
     expect(res.body.userId).toBe(user.id)
   })
 
