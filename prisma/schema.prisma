@@ -36,6 +36,7 @@ model Transaction {
   installments Int?
   isSubscription Boolean?
   dueDate DateTime?
+  type String?
   resolved Boolean @default(false)
 
   user        User   @relation(fields: [userId], references: [id])
