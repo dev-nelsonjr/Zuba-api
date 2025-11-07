@@ -1,5 +1,15 @@
 import * as model from './model'
 
+export const getBalance = async where => {
+  const balance = await model.aggregate({
+    where,
+    _sum: {
+      value: true,
+    },
+  })
+  return balance._sum.value
+}
+
 export const getMonthBalance = async ({ month, ...params }) => {
   const where = {
     ...params,
@@ -20,11 +30,15 @@ export const getMonthBalance = async ({ month, ...params }) => {
   const summary = balance.reduce((memo, current) => ({
     ...memo,
     [current.type]: current._sum.value,
-  }), {})
+  }), {
+    expense: 0,
+    revenue: 0,
+  })
+
 
   return {
     ...summary,
-    balance: parseFloat(((summary.revenue * 100) + (summary.expense * 100))/100)
+    balance: parseFloat(((summary.revenue * 100 + summary.expense * 100))/100)
  } 
 }
 
