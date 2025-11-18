@@ -1,0 +1,22 @@
+FROM node:22-bookworm-slim
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends cron \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+ENV HUSKY=0
+
+COPY package.json yarn.lock ./
+
+RUN corepack enable \
+  && yarn install --frozen-lockfile --production
+
+COPY docker-entrypoint-cron.sh /usr/local/bin/docker-entrypoint-cron
+
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint-cron \
+  && chmod +x /usr/local/bin/docker-entrypoint-cron
+
+CMD ["/usr/local/bin/docker-entrypoint-cron"]
+

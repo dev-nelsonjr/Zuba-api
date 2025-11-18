@@ -10,3 +10,16 @@ services:
      - POSTGRES_USER=$DB_USER
      - POSTGRES_PASSWORD=$DB_PASS
      - POSTGRES_DB=$DB_NAME
+
+  cronjobs:
+    container_name: cronjobs
+    build:
+      context: .
+      dockerfile: Dockerfile.cron
+    depends_on:
+      - db
+    environment:
+      DB_URL: postgresql://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
+    volumes:
+      - ./src/jobs/.crontab:/usr/src/app/.crontab:ro
+      - ./dist:/usr/src/app/dist
