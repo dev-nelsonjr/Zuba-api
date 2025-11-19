@@ -64,12 +64,12 @@ export const signup = async ctx => {
 }
 
 export const update = async ctx => {
-  const { name, email } = ctx.request.body
+  const { name, email, firebaseToken } = ctx.request.body
 
   try {
     const user = await model.update({
       where: { id: ctx.auth.user.id },
-      data: { name, email },
+      data: { name, email, firebaseToken },
     })
 
     ctx.body = user

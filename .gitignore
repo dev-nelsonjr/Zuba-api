@@ -214,3 +214,6 @@ $RECYCLE.BIN/
 
 # File lock
 package-lock.json
+
+#firebase
+src/interfaces/firebase/service-account.json
