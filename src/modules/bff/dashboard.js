@@ -6,7 +6,7 @@ export const dashboard = async ctx => {
     userId: ctx.auth.user.id,
   }
 
-  const total = await transactionServices.getBalance({userId: where.userId})
+  const total = await transactionServices.getBalance({ userId: where.userId })
   const transactions = await transactionServices.getListByMonth(where)
   const monthBalance = await transactionServices.getMonthBalance(where)
 
