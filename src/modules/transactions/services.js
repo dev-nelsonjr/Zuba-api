@@ -14,11 +14,13 @@ export const getBalance = async where => {
 }
 
 export const getMonthBalance = async ({ month, ...params }) => {
+  const year = new Date().getFullYear()
+
   const where = {
     ...params,
     dueDate: {
-      gte: new Date(2025, month, 1),
-      lt: new Date(2025, month + 1, 1),
+      gte: new Date(year, month, 1),
+      lt: new Date(year, month + 1, 1),
     },
   }
   const balance = await model.groupBy({
@@ -46,16 +48,19 @@ export const getMonthBalance = async ({ month, ...params }) => {
   }
 }
 
-export const getListByMonth = ({ month, ...params }) =>
-  model.findMany({
+export const getListByMonth = ({ month, ...params }) => {
+  const year = new Date().getFullYear()
+
+  return model.findMany({
     where: {
       ...params,
       dueDate: {
-        gte: new Date(2025, month, 1),
-        lt: new Date(2025, month + 1, 1),
+        gte: new Date(year, month, 1),
+        lt: new Date(year, month + 1, 1),
       },
     },
   })
+}
 
 export const getTodayTransactions = () => {
   const today = new Date()
