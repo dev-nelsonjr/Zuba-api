@@ -3504,7 +3504,7 @@ find-up@^7.0.0:
     path-exists "^5.0.0"
     unicorn-magic "^0.1.0"
 
-firebase-admin@12.13.0:
+firebase-admin@13.1.0:
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-13.1.0.tgz#ffe3332ca7b6f19790d29296fc25c103be8ee5fa"
   integrity sha512-XPKiTyPyvUMZ22EPk4M1oSiZ8/4qFeYwjK88o/DYpGtNbOLKrM6Oc9jTaK+P6Vwn3Vr1+OCyLLJ93Bci382UqA==
@@ -4962,16 +4962,6 @@ koa-convert@^2.0.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^4.1.0"
-
-koa-router@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/koa-router/-/koa-router-14.0.0.tgz#67b15730971e574c86333ca2ea1fa9ed1b0d4505"
-  integrity sha512-Ue8f/PRsLLNm6b7y+eS6xkqvsG2xH11d2VB1HPcfdfW6p5736kCHf2pXaq8q9XPQ01x0Dk7V/P5Il9pe+tGTxA==
-  dependencies:
-    debug "^4.4.1"
-    http-errors "^2.0.0"
-    koa-compose "^4.1.0"
-    path-to-regexp "^8.2.0"
 
 koa@^2.15.3:
   version "2.16.4"
