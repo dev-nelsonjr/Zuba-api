@@ -61,4 +61,35 @@ describe('User routes', () => {
 
     expect(decodedToken.sub).toBe(user.id)
   })
+
+  it('should create user without returning password', async () => {
+    const userData = {
+      name: 'New User',
+      email: 'new-user@test.com',
+      password: '1234',
+    }
+
+    const result = await request(server).post('/signup').send(userData)
+
+    expect(result.status).toBe(200)
+    expect(result.body.user.name).toBe(userData.name)
+    expect(result.body.user.email).toBe(userData.email)
+    expect(result.body.user.password).toBeFalsy()
+    expect(result.body.token).toBeTruthy()
+  })
+
+  it('should update profile without returning password', async () => {
+    const { user, token } = await getUserAndToken()
+    const firebaseToken = 'firebase-token'
+
+    const result = await request(server)
+      .put('/profile')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ firebaseToken })
+
+    expect(result.status).toBe(200)
+    expect(result.body.id).toBe(user.id)
+    expect(result.body.firebaseToken).toBe(firebaseToken)
+    expect(result.body.password).toBeFalsy()
+  })
 })

@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import { omit } from 'ramda'
 
 import * as model from './model'
 import { decodeBasicToken } from './services'
+
+const sanitizeUser = user => omit(['password'], user)
 
 export const login = async ctx => {
   try {
@@ -20,7 +23,7 @@ export const login = async ctx => {
     }
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
-    ctx.body = { user, token }
+    ctx.body = { user: sanitizeUser(user), token }
   } catch (error) {
     console.log(error)
 
@@ -53,7 +56,7 @@ export const signup = async ctx => {
     })
 
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
-    ctx.body = { user, token }
+    ctx.body = { user: sanitizeUser(user), token }
   } catch (err) {
     console.log(err)
     ctx.status = 500
@@ -72,7 +75,7 @@ export const update = async ctx => {
       data: { name, email, firebaseToken },
     })
 
-    ctx.body = user
+    ctx.body = sanitizeUser(user)
   } catch {
     ctx.status = 500
     ctx.body = 'Internal Server Error'
