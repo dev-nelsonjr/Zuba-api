@@ -25,6 +25,18 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(401)
   })
 
+  it('should return unauthorized with invalid token', async () => {
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', 'Bearer invalid-token')
+      .send({
+        description: 'test Transaction',
+        value: '10.05',
+      })
+
+    expect(res.status).toBe(401)
+  })
+
   it('should create transaction to logged in user', async () => {
     const transactionData = {
       description: 'test Transaction',

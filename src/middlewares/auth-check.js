@@ -12,7 +12,11 @@ export const decodeBearerToken = bearerToken => {
     return false
   }
 
-  return jwt.verify(token, process.env.JWT_SECRET)
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET)
+  } catch {
+    return false
+  }
 }
 
 export const authCheck = async (ctx, next) => {
