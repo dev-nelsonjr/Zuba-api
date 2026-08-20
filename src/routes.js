@@ -1,9 +1,12 @@
 import Router from '@koa/router'
 
 import { authCheck } from './middlewares/auth-check'
+import { validateBody } from './middlewares/validate-body'
 
 import * as users from './modules/users'
+import { signupSchema } from './modules/users/schema'
 import * as transactions from './modules/transactions'
+import { createTransactionSchema } from './modules/transactions/schema'
 import { dashboard } from './modules/bff/dashboard'
 
 export const router = new Router()
@@ -59,13 +62,18 @@ router.get('/health', ctx => {
 
 // Auth
 router.post('/login', users.login)
-router.post('/signup', users.signup)
+router.post('/signup', validateBody(signupSchema), users.signup)
 
 // Users (account)
 router.put('/profile', authCheck, users.update)
 router.delete('/profile', authCheck, users.remove)
 
-router.post('/transactions', authCheck, transactions.create)
+router.post(
+  '/transactions',
+  authCheck,
+  validateBody(createTransactionSchema),
+  transactions.create
+)
 router.get('/transactions', authCheck, transactions.list)
 router.put('/transactions/:id', authCheck, transactions.update)
 router.delete('/transactions/:id', authCheck, transactions.remove)

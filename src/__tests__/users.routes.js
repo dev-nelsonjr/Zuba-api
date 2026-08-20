@@ -78,6 +78,17 @@ describe('User routes', () => {
     expect(result.body.token).toBeTruthy()
   })
 
+  it('should reject signup with invalid email', async () => {
+    const result = await request(server).post('/signup').send({
+      name: 'New User',
+      email: 'invalid-email',
+      password: '1234',
+    })
+
+    expect(result.status).toBe(400)
+    expect(result.body.error).toBe('Invalid request body')
+  })
+
   it('should update profile without returning password', async () => {
     const { user, token } = await getUserAndToken()
     const firebaseToken = 'firebase-token'

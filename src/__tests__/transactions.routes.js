@@ -78,4 +78,16 @@ describe('Transaction routes', () => {
 
     expect(res.status).toBe(400)
   })
+
+  it('should reject transaction with invalid value', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ description: 'Invalid transaction', value: 'ten' })
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid request body')
+  })
 })

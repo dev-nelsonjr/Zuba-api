@@ -76,6 +76,7 @@
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
     "ramda": "^0.30.1",
-    "swagger-injector": "^4.0.1"
+    "swagger-injector": "^4.0.1",
+    "zod": "^4.1.5"
   }
 }
