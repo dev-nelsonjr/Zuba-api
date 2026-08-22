@@ -90,4 +90,27 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(400)
     expect(res.body.error).toBe('Invalid request body')
   })
+
+  it('should reject dashboard request with invalid period', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .get('/dashboard')
+      .query({ month: 13, year: 2025 })
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid query parameters')
+  })
+
+  it('should accept dashboard request without year for older clients', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .get('/dashboard')
+      .query({ month: 1 })
+      .set('Authorization', `Bearer ${token}`)
+
+    expect(res.status).toBe(200)
+  })
 })

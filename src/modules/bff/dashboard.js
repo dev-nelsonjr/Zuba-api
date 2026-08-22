@@ -1,8 +1,10 @@
 import * as transactionServices from '~/modules/transactions/services'
 
 export const dashboard = async ctx => {
+  const { month, year } = ctx.state.validatedQuery
   const where = {
-    month: ctx.request.query.month - 1,
+    month: month - 1,
+    year,
     userId: ctx.auth.user.id,
   }
 

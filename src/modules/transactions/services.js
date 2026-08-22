@@ -13,9 +13,7 @@ export const getBalance = async where => {
   return balance._sum.value
 }
 
-export const getMonthBalance = async ({ month, ...params }) => {
-  const year = new Date().getFullYear()
-
+export const getMonthBalance = async ({ month, year, ...params }) => {
   const where = {
     ...params,
     dueDate: {
@@ -48,9 +46,7 @@ export const getMonthBalance = async ({ month, ...params }) => {
   }
 }
 
-export const getListByMonth = ({ month, ...params }) => {
-  const year = new Date().getFullYear()
-
+export const getListByMonth = ({ month, year, ...params }) => {
   return model.findMany({
     where: {
       ...params,

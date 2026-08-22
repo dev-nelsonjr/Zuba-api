@@ -4,8 +4,10 @@ import * as model from './model'
 import * as services from './services'
 
 export const list = async ctx => {
+  const { month, year } = ctx.state.validatedQuery
   const transactions = await services.getListByMonth({
-    month: ctx.request.query.month,
+    month: month - 1,
+    year,
     userId: ctx.auth.user.id,
   })
 
