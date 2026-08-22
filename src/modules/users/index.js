@@ -25,74 +25,47 @@ export const login = async ctx => {
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
     ctx.body = { user: sanitizeUser(user), token }
   } catch (error) {
-    console.log(error)
-
     if (error.custom) {
       ctx.status = 400
       return
     }
 
-    ctx.status = 500
-    ctx.body = 'Internal Server Error'
-    return
+    throw error
   }
 }
 
 export const signup = async ctx => {
-  try {
-    const saltRounds = 10
+  const saltRounds = 10
 
-    const hashedPassword = await bcrypt.hash(
-      ctx.request.body.password,
-      saltRounds
-    )
+  const hashedPassword = await bcrypt.hash(ctx.request.body.password, saltRounds)
 
-    const user = await model.create({
-      data: {
-        name: ctx.request.body.name,
-        email: ctx.request.body.email,
-        password: hashedPassword,
-      },
-    })
+  const user = await model.create({
+    data: {
+      name: ctx.request.body.name,
+      email: ctx.request.body.email,
+      password: hashedPassword,
+    },
+  })
 
-    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
-    ctx.body = { user: sanitizeUser(user), token }
-  } catch (err) {
-    console.log(err)
-    ctx.status = 500
-    ctx.body = 'Internal Server Error'
-
-    return
-  }
+  const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET)
+  ctx.body = { user: sanitizeUser(user), token }
 }
 
 export const update = async ctx => {
   const { name, email, firebaseToken } = ctx.request.body
 
-  try {
-    const user = await model.update({
-      where: { id: ctx.auth.user.id },
-      data: { name, email, firebaseToken },
-    })
+  const user = await model.update({
+    where: { id: ctx.auth.user.id },
+    data: { name, email, firebaseToken },
+  })
 
-    ctx.body = sanitizeUser(user)
-  } catch {
-    ctx.status = 500
-    ctx.body = 'Internal Server Error'
-
-    return
-  }
+  ctx.body = sanitizeUser(user)
 }
 
 export const remove = async ctx => {
-  try {
-    await model.remove({
-      where: { id: ctx.auth.user.id },
-    })
+  await model.remove({
+    where: { id: ctx.auth.user.id },
+  })
 
-    ctx.body = { id: ctx.auth.user.id }
-  } catch {
-    ctx.status = 500
-    ctx.body = 'Internal Server Error'
-  }
+  ctx.body = { id: ctx.auth.user.id }
 }

@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import * as model from './model'
 
 import * as services from './services'
@@ -15,31 +14,22 @@ export const list = async ctx => {
 }
 
 export const create = async ctx => {
-  try {
-    const transaction = await model.create({
-      data: {
-        userId: ctx.auth.user.id,
-        description: ctx.request.body.description,
+  const transaction = await model.create({
+    data: {
+      userId: ctx.auth.user.id,
+      description: ctx.request.body.description,
 
-        ...(ctx.request.body.dueDate && {
-          dueDate: ctx.request.body.dueDate,
-        }),
+      ...(ctx.request.body.dueDate && {
+        dueDate: ctx.request.body.dueDate,
+      }),
 
-        ...(ctx.request.body.value && {
-          value: ctx.request.body.value,
-        }),
-      },
-    })
+      ...(ctx.request.body.value && {
+        value: ctx.request.body.value,
+      }),
+    },
+  })
 
-    ctx.body = transaction
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientValidationError) {
-      ctx.status = 400
-      return
-    }
-
-    return Promise.reject(error)
-  }
+  ctx.body = transaction
 }
 
 export const update = async ctx => {
