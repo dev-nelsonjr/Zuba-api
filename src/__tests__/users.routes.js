@@ -103,4 +103,16 @@ describe('User routes', () => {
     expect(result.body.firebaseToken).toBe(firebaseToken)
     expect(result.body.password).toBeFalsy()
   })
+
+  it('should reject profile update with invalid email', async () => {
+    const { token } = await getUserAndToken()
+
+    const result = await request(server)
+      .put('/profile')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'invalid-email' })
+
+    expect(result.status).toBe(400)
+    expect(result.body.error).toBe('Invalid request body')
+  })
 })

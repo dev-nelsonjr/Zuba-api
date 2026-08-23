@@ -5,11 +5,12 @@ import { validateBody } from './middlewares/validate-body'
 import { validateQuery } from './middlewares/validate-query'
 
 import * as users from './modules/users'
-import { signupSchema } from './modules/users/schema'
+import { signupSchema, updateUserSchema } from './modules/users/schema'
 import * as transactions from './modules/transactions'
 import {
   createTransactionSchema,
   periodSchema,
+  updateTransactionSchema,
 } from './modules/transactions/schema'
 import { dashboard } from './modules/bff/dashboard'
 
@@ -69,7 +70,7 @@ router.post('/login', users.login)
 router.post('/signup', validateBody(signupSchema), users.signup)
 
 // Users (account)
-router.put('/profile', authCheck, users.update)
+router.put('/profile', authCheck, validateBody(updateUserSchema), users.update)
 router.delete('/profile', authCheck, users.remove)
 
 router.post(
@@ -84,7 +85,12 @@ router.get(
   validateQuery(periodSchema),
   transactions.list
 )
-router.put('/transactions/:id', authCheck, transactions.update)
+router.put(
+  '/transactions/:id',
+  authCheck,
+  validateBody(updateTransactionSchema),
+  transactions.update
+)
 router.delete('/transactions/:id', authCheck, transactions.remove)
 
 //BFF Routes

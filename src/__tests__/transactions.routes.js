@@ -94,6 +94,18 @@ describe('Transaction routes', () => {
     expect(res.body.error).toBe('Invalid request body')
   })
 
+  it('should reject transaction update with invalid value', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .put('/transactions/transaction-id')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ value: 'ten' })
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid request body')
+  })
+
   it('should reject dashboard request with invalid period', async () => {
     const { token } = await getUserAndToken()
 

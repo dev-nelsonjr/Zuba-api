@@ -40,14 +40,7 @@ export const update = async ctx => {
       id: ctx.params.id,
       userId: ctx.auth.user.id,
     },
-    data: {
-      description: ctx.request.body.description,
-      ...(ctx.request.body.value && {
-        value: ctx.request.body.value,
-      }),
-
-      ...(ctx.request.body.dueDate && { dueDate: ctx.request.body.dueDate }),
-    },
+    data: ctx.request.body,
   })
 
   ctx.body = transaction

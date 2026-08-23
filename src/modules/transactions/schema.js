@@ -12,6 +12,11 @@ export const createTransactionSchema = z.object({
   type: z.enum(['expense', 'revenue']).optional(),
 })
 
+export const updateTransactionSchema = createTransactionSchema
+  .partial()
+  .refine(data => Object.keys(data).length > 0)
+  .refine(data => !data.type || data.value !== undefined)
+
 export const periodSchema = z.object({
   month: z.coerce.number().int().min(1).max(12),
   year: z.coerce
