@@ -14,18 +14,20 @@ export const list = async ctx => {
 }
 
 export const create = async ctx => {
+  const {
+    description,
+    value,
+    type = 'revenue',
+    dueDate,
+  } = ctx.request.body
+
   const transaction = await model.create({
     data: {
       userId: ctx.auth.user.id,
-      description: ctx.request.body.description,
-
-      ...(ctx.request.body.dueDate && {
-        dueDate: ctx.request.body.dueDate,
-      }),
-
-      ...(ctx.request.body.value && {
-        value: ctx.request.body.value,
-      }),
+      description,
+      value,
+      type,
+      dueDate: dueDate || new Date(),
     },
   })
 
