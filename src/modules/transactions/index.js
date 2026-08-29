@@ -14,12 +14,7 @@ export const list = async ctx => {
 }
 
 export const create = async ctx => {
-  const {
-    description,
-    value,
-    type = 'revenue',
-    dueDate,
-  } = ctx.request.body
+  const { description, value, type, dueDate } = ctx.request.body
 
   const transaction = await model.create({
     data: {

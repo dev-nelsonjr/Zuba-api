@@ -60,6 +60,22 @@ describe('Transaction routes', () => {
     expect(res.body.userId).toBe(user.id)
   })
 
+  it('should infer expense type from a negative value', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        description: 'Inferred expense',
+        value: '-10.05',
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body.type).toBe('expense')
+    expect(res.body.value).toBe('-10.05')
+  })
+
   it('should throw error when try create transaction without value', async () => {
     const { token } = await getUserAndToken()
 
