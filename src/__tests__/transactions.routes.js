@@ -122,6 +122,31 @@ describe('Transaction routes', () => {
     expect(res.body.error).toBe('Invalid request body')
   })
 
+  it('should update transaction status', async () => {
+    const { user, token } = await getUserAndToken()
+    const transaction = await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        description: 'Electricity bill',
+        value: '-75.00',
+        type: 'expense',
+      },
+    })
+
+    const res = await request(server)
+      .put(`/transactions/${transaction.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ resolved: true })
+
+    const updatedTransaction = await prisma.transaction.findUnique({
+      where: { id: transaction.id },
+    })
+
+    expect(res.status).toBe(200)
+    expect(res.body.count).toBe(1)
+    expect(updatedTransaction.resolved).toBe(true)
+  })
+
   it('should reject dashboard request with invalid period', async () => {
     const { token } = await getUserAndToken()
 

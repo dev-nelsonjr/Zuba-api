@@ -14,6 +14,9 @@ export const createTransactionSchema = z.object({
 
 export const updateTransactionSchema = createTransactionSchema
   .partial()
+  .extend({
+    resolved: z.boolean().optional(),
+  })
   .refine(data => Object.keys(data).length > 0)
   .refine(data => !data.type || data.value !== undefined)
 
