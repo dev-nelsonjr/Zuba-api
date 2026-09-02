@@ -1,19 +1,20 @@
+/* global require, __dirname */
+
 const fs = require('fs')
 const path = require('path')
-const swaggerjsdoc = require("swagger-jsdoc")
+const swaggerjsdoc = require('swagger-jsdoc')
+const definition = require('./definition')
 
 const options = {
-definition: {
-  openapi: '3.0.0',
-  info: {
-    title: 'Zuba API',
-    version: '1.0.0'
-},
-},
-apis: [path.join(__dirname, '../src/routes.js')]
+  definition,
+  apis: [path.join(__dirname, '../src/routes.js')],
+  failOnErrors: true,
 }
 
 const openapiSpecification = swaggerjsdoc(options)
 
-fs.writeFileSync(path.join(__dirname, 'openapi.json'), JSON.stringify(openapiSpecification))
+fs.writeFileSync(
+  path.join(__dirname, 'openapi.json'),
+  JSON.stringify(openapiSpecification, null, 2)
+)
 
