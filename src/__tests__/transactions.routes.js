@@ -147,6 +147,53 @@ describe('Transaction routes', () => {
     expect(updatedTransaction.resolved).toBe(true)
   })
 
+  it('should delete transaction from logged in user', async () => {
+    const { user, token } = await getUserAndToken()
+    const transaction = await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        description: 'Old transaction',
+        value: '25.00',
+        type: 'revenue',
+      },
+    })
+
+    const res = await request(server)
+      .delete(`/transactions/${transaction.id}`)
+      .set('Authorization', `Bearer ${token}`)
+
+    const deletedTransaction = await prisma.transaction.findUnique({
+      where: { id: transaction.id },
+    })
+
+    expect(res.status).toBe(200)
+    expect(res.body.id).toBe(transaction.id)
+    expect(deletedTransaction).toBeNull()
+  })
+
+  it('should not delete transaction from another user', async () => {
+    const { user } = await getUserAndToken()
+    const { token } = await getUserAndToken({ email: 'other@test.com' })
+    const transaction = await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        description: 'Private transaction',
+        value: '25.00',
+        type: 'revenue',
+      },
+    })
+
+    await request(server)
+      .delete(`/transactions/${transaction.id}`)
+      .set('Authorization', `Bearer ${token}`)
+
+    const storedTransaction = await prisma.transaction.findUnique({
+      where: { id: transaction.id },
+    })
+
+    expect(storedTransaction).not.toBeNull()
+  })
+
   it('should reject dashboard request with invalid period', async () => {
     const { token } = await getUserAndToken()
 
