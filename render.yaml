@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: zuba-api
+    runtime: node
+    plan: free
+    buildCommand: yarn install --frozen-lockfile && yarn prisma generate && yarn build
+    startCommand: yarn db:deploy && yarn start
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: DB_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false

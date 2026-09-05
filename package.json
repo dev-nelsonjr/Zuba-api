@@ -10,6 +10,7 @@
   },
   "scripts": {
     "db:migrate": "yarn prisma migrate dev",
+    "db:deploy": "yarn prisma migrate deploy",
     "docs:generate": "node DOCS/generate.js",
     "prepare": "husky",
     "fix": "run-s \"lint:fix {@}\" \"format:write {@}\" --",
