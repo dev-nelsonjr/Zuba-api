@@ -7,9 +7,23 @@ import { router } from './routes'
 import { errorHandler } from './middlewares/error-handler'
 
 const app = new koa()
+const allowedOrigins = (process.env.CORS_ORIGIN || '*')
+  .split(',')
+  .map(origin => origin.trim())
 
 app.use(errorHandler)
-app.use(cors())
+app.use(
+  cors({
+    origin: ctx => {
+      const requestOrigin = ctx.get('Origin')
+
+      if (allowedOrigins.includes('*') || !requestOrigin) return '*'
+      if (allowedOrigins.includes(requestOrigin)) return requestOrigin
+
+      return ''
+    },
+  })
+)
 app.use(bodyParser())
 app.use(router.routes())
 app.use(router.allowedMethods())
