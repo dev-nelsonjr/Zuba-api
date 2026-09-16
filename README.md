@@ -1,20 +1,25 @@
 # Zuba API
 
-API do **Zuba**, uma aplicação de controle financeiro pessoal. Este serviço centraliza autenticação, transações, consolidação mensal do dashboard e envio de notificações de vencimento.
+API do **Zuba**, um MVP de controle financeiro pessoal. O serviço concentra autenticação, contas de usuário, transações, consolidação mensal do dashboard e envio de lembretes de vencimento.
 
-O projeto foi desenvolvido individualmente como parte de uma formação prática em desenvolvimento de software e evoluiu para um MVP full stack composto por [aplicação web](https://github.com/dev-nelsonjr/Zuba-web), [aplicativo mobile](https://github.com/dev-nelsonjr/zuba-mobile) e esta API.
+O projeto foi desenvolvido individualmente e integra a [aplicação web](https://github.com/dev-nelsonjr/Zuba-web) e o [aplicativo mobile](https://github.com/dev-nelsonjr/zuba-mobile).
+
+**API em produção:** [zuba-api-jvzt.onrender.com](https://zuba-api-jvzt.onrender.com/health)
 
 ## Funcionalidades
 
-- Cadastro e autenticação de usuários com JWT
+- Cadastro e autenticação com JWT
 - Atualização e remoção de conta
-- Criação, listagem, edição e remoção de transações
-- Filtro de transações por mês
-- Cálculo de receitas, despesas e saldo mensal
-- Rota BFF que reúne os dados necessários ao dashboard
-- Notificações de vencimento com Firebase Cloud Messaging
-- Job agendado com cron e Docker
-- Testes de integração das rotas
+- Criação, consulta, edição e exclusão de transações
+- Controle de transações pendentes e concluídas
+- Consulta por mês e ano
+- Consolidação de receitas, despesas e saldo mensal
+- Endpoint dedicado ao dashboard dos clientes
+- Lembretes de vencimento com Firebase Cloud Messaging
+- Job de notificações executado por cron em container
+- Validação de entrada e tratamento centralizado de erros
+- Contrato HTTP documentado com OpenAPI
+- Testes unitários e de integração das rotas
 
 ## Tecnologias
 
@@ -22,44 +27,46 @@ O projeto foi desenvolvido individualmente como parte de uma formação prática
 - PostgreSQL e Prisma ORM
 - JSON Web Token e bcrypt
 - Firebase Admin SDK
+- Zod
 - Jest e Supertest
 - Docker e cron
-- Swagger/OpenAPI
+- OpenAPI
 
-## Estrutura principal
+## Arquitetura
 
 ```text
 prisma/                  schema e migrações do banco
+DOCS/                    definição e contrato OpenAPI gerado
 src/
-  data/                  cliente do Prisma
+  data/                  acesso ao Prisma
   interfaces/firebase/   integração com Firebase Admin
-  jobs/notifications/    execução das notificações
-  middlewares/           autenticação e middlewares HTTP
-  modules/               regras de usuários, transações e BFF
-  routes.js               rotas da aplicação
+  jobs/notifications/    job de lembretes de vencimento
+  middlewares/           autenticação, validação e erros HTTP
+  modules/               regras de usuários, transações e dashboard
+  routes.js              contrato e composição das rotas
 ```
 
-## Como executar localmente
+As rotas recebem e validam a requisição, os módulos concentram as regras de negócio e a camada de dados isola o acesso ao PostgreSQL. O dashboard funciona como uma composição dos dados mensais consumidos pelos clientes Web e Mobile.
+
+## Executando localmente
 
 ### Pré-requisitos
 
-- Node.js 18 ou superior
-- Yarn 1
+- Node.js e Yarn
 - Docker Desktop
-
-Clone o repositório e instale as dependências:
 
 ```bash
 git clone https://github.com/dev-nelsonjr/Zuba-api.git
 cd Zuba-api
-yarn
+yarn install
 ```
 
-Crie um arquivo `.env` na raiz:
+Copie `.env.example` para `.env` e ajuste os valores:
 
 ```env
 SERVER_PORT=9900
-JWT_SECRET=troque-por-uma-chave-segura
+JWT_SECRET=change-me
+CORS_ORIGIN=http://localhost:5173
 
 DB_PORT=5432
 DB_USER=postgres
@@ -68,12 +75,12 @@ DB_NAME=zuba
 DB_URL=postgresql://postgres:postgres@localhost:5432/zuba
 ```
 
-Suba o PostgreSQL e prepare o banco:
+Suba o banco, gere o cliente do Prisma e aplique as migrações:
 
 ```bash
 docker compose up -d db
 yarn prisma generate
-yarn prisma migrate dev
+yarn db:migrate
 ```
 
 Inicie a API:
@@ -82,50 +89,60 @@ Inicie a API:
 yarn dev
 ```
 
-Por padrão, o serviço ficará disponível em `http://localhost:9900`.
+O serviço ficará disponível em `http://localhost:9900`.
 
 ## Rotas principais
 
 | Método | Rota | Descrição |
 | --- | --- | --- |
-| `GET` | `/health` | Verifica se a API está disponível |
+| `GET` | `/health` | Verifica a disponibilidade da API |
 | `POST` | `/signup` | Cria uma conta |
 | `POST` | `/login` | Autentica um usuário |
 | `PUT` | `/profile` | Atualiza a conta autenticada |
 | `DELETE` | `/profile` | Remove a conta autenticada |
-| `GET` | `/transactions?month=10` | Lista transações do mês |
+| `GET` | `/transactions?month={month}&year={year}` | Lista as transações do período |
 | `POST` | `/transactions` | Cria uma transação |
 | `PUT` | `/transactions/:id` | Atualiza uma transação |
-| `DELETE` | `/transactions/:id` | Remove uma transação |
-| `GET` | `/dashboard?month=10` | Retorna o resumo mensal e suas transações |
+| `DELETE` | `/transactions/:id` | Exclui uma transação |
+| `GET` | `/dashboard?month={month}&year={year}` | Retorna o resumo e as transações do período |
 
-As rotas de perfil, transações e dashboard exigem o header `Authorization: Bearer <token>`.
+As rotas de perfil, transações e dashboard exigem `Authorization: Bearer <token>`. O contrato completo é mantido em [`DOCS/openapi.json`](DOCS/openapi.json) e pode ser atualizado com:
+
+```bash
+yarn docs:generate
+```
 
 ## Notificações
 
-Para testar as notificações, configure um projeto no Firebase e informe a credencial do Firebase Admin pela variável:
+Configure um projeto no Firebase e forneça a credencial administrativa somente por variável de ambiente:
 
 ```env
 FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"..."}
 ```
 
-Use o JSON completo em uma única linha e mantenha essa variável somente no ambiente local ou no serviço de hospedagem. Nunca publique essa credencial.
+O valor deve conter o JSON completo em uma única linha. Essa credencial não deve ser adicionada ao repositório.
 
-Depois, gere o build e suba o job agendado:
+Para montar a aplicação e executar o job localmente:
 
 ```bash
 yarn build
 docker compose up --build cronjobs
 ```
 
-## Testes
+## Qualidade
 
-Com o banco de testes configurado, execute:
+Os testes utilizam uma base separada derivada de `DB_URL`; mantenha o PostgreSQL disponível antes de executá-los.
 
 ```bash
 yarn test
+yarn lint:all
+yarn build
 ```
 
-## Status
+## Deploy
 
-O projeto está em estágio de MVP: os principais fluxos financeiros estão implementados e integrados com os clientes web e mobile. Os próximos passos incluem ampliar a cobertura de testes, automatizar integração contínua e preparar uma estratégia de deploy.
+O arquivo [`render.yaml`](render.yaml) descreve o serviço da API. Em produção, configure `DB_URL`, `CORS_ORIGIN` e `FIREBASE_SERVICE_ACCOUNT` no provedor de hospedagem. As migrações são aplicadas antes da inicialização do servidor.
+
+## Escopo do MVP
+
+O fluxo principal está completo: criar uma conta, autenticar, administrar transações e consultar o resultado mensal nos clientes Web e Mobile. Integração contínua, recuperação de senha e observabilidade mais detalhada permanecem como evoluções futuras.
