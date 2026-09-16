@@ -9,16 +9,13 @@ jest.mock('~/interfaces/firebase', () => ({
 
 describe('Transaction services', () => {
   it('should filter transactions by selected year', async () => {
-    // prepare
     const month = 0
     const year = 2025
 
     model.findMany.mockResolvedValue([])
 
-    // execution
     await getListByMonth({ month, year, userId: 'user-id' })
 
-    // expectation
     expect(model.findMany).toHaveBeenCalledWith({
       where: {
         userId: 'user-id',

@@ -30,7 +30,7 @@ export const router = new Router()
  *         description: Username for testing
  *     responses:
  *       '200':
- *         description: Successful response with the query param.
+ *         description: Successful response with the query parameter.
  *         content:
  *           application/json:
  *             schema:
@@ -67,7 +67,7 @@ router.get('/health', ctx => {
   ctx.body = { status: 'ok' }
 })
 
-// Auth
+// Authentication routes
 /**
  * @openapi
  * /login:
@@ -115,7 +115,7 @@ router.post('/login', users.login)
  */
 router.post('/signup', validateBody(signupSchema), users.signup)
 
-// Users (account)
+// Account routes
 /**
  * @openapi
  * /profile:
@@ -263,7 +263,7 @@ router.get(
  *       - $ref: '#/components/parameters/TransactionId'
  *     responses:
  *       '200':
- *         description: Delete request completed for the authenticated user.
+ *         description: Transaction deleted successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -283,7 +283,7 @@ router.put(
 )
 router.delete('/transactions/:id', authCheck, transactions.remove)
 
-//BFF Routes
+// Dashboard aggregation route
 /**
  * @openapi
  * /dashboard:

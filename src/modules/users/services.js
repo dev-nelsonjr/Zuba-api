@@ -1,5 +1,5 @@
 class TokenTypeError extends Error {
-  constructor(message = 'Wrong token type') {
+  constructor(message = 'Unsupported authorization type') {
     super()
     this.message = message
     this.custom = true
@@ -7,7 +7,7 @@ class TokenTypeError extends Error {
 }
 
 class EncodedError extends Error {
-  constructor(message = 'Wrong credentials is not correct encoded') {
+  constructor(message = 'Credentials are not valid Base64') {
     super()
     this.message = message
     this.custom = true
@@ -15,7 +15,7 @@ class EncodedError extends Error {
 }
 
 class BadCredentialsError extends Error {
-  constructor(message = 'Wrong credentials format') {
+  constructor(message = 'Credentials must use email:password format') {
     super()
     this.message = message
     this.custom = true

@@ -17,41 +17,32 @@ beforeEach(async () => {
 })
 
 describe('User routes', () => {
-  it('should return not found with wrong password', async () => {
-    //setup
+  it('should return not found for an incorrect password', async () => {
     const email = 'test@test.com'
     const password = 'wrong'
 
-    //execute
     const result = await request(server).post('/login').auth(email, password)
 
-    //expec
     expect(result.status).toBe(404)
   })
 
-  it('should return not found with wrong email', async () => {
-    //setup
+  it('should return not found for an unknown email', async () => {
     const email = 'wrong@wrong.com'
     const password = '1234'
 
-    //execute
     const result = await request(server).post('/login').auth(email, password)
 
-    //expec
     expect(result.status).toBe(404)
   })
 
-  it('should return logged in user by correct credentials', async () => {
-    //setup
+  it('should authenticate a user with valid credentials', async () => {
     const email = 'unique@test.com'
     const password = '1234'
     const { user } = await getUserAndToken({ email, password })
 
-    //execute
     const result = await request(server).post('/login').auth(email, password)
     const decodedToken = jwt.verify(result.body.token, process.env.JWT_SECRET)
 
-    //expec
     expect(result.status).toBe(200)
     expect(result.body.user).toBeTruthy()
     expect(result.body.token).toBeTruthy()

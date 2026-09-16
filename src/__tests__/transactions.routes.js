@@ -16,9 +16,9 @@ beforeEach(async () => {
 })
 
 describe('Transaction routes', () => {
-  it('should throw error when try create transaction without auth', async () => {
+  it('should reject transaction creation without authentication', async () => {
     const res = await request(server).post('/transactions').send({
-      description: 'test Transaction',
+      description: 'Test transaction',
       value: '10.05',
     })
 
@@ -30,16 +30,16 @@ describe('Transaction routes', () => {
       .post('/transactions')
       .set('Authorization', 'Bearer invalid-token')
       .send({
-        description: 'test Transaction',
+        description: 'Test transaction',
         value: '10.05',
       })
 
     expect(res.status).toBe(401)
   })
 
-  it('should create transaction to logged in user', async () => {
+  it('should create a transaction for the authenticated user', async () => {
     const transactionData = {
-      description: 'test Transaction',
+      description: 'Test transaction',
       value: '10.05',
       type: 'expense',
     }
@@ -76,18 +76,18 @@ describe('Transaction routes', () => {
     expect(res.body.value).toBe('-10.05')
   })
 
-  it('should throw error when try create transaction without value', async () => {
+  it('should reject transaction creation without a value', async () => {
     const { token } = await getUserAndToken()
 
     const res = await request(server)
       .post('/transactions')
       .set('Authorization', `Bearer ${token}`)
-      .send({ description: 'No way' })
+      .send({ description: 'Missing value' })
 
     expect(res.status).toBe(400)
   })
 
-  it('should throw error when try create transaction without description', async () => {
+  it('should reject transaction creation without a description', async () => {
     const { token } = await getUserAndToken()
 
     const res = await request(server)
@@ -147,7 +147,7 @@ describe('Transaction routes', () => {
     expect(updatedTransaction.resolved).toBe(true)
   })
 
-  it('should delete transaction from logged in user', async () => {
+  it('should delete a transaction owned by the authenticated user', async () => {
     const { user, token } = await getUserAndToken()
     const transaction = await prisma.transaction.create({
       data: {
@@ -171,7 +171,7 @@ describe('Transaction routes', () => {
     expect(deletedTransaction).toBeNull()
   })
 
-  it('should not delete transaction from another user', async () => {
+  it('should not delete a transaction owned by another user', async () => {
     const { user } = await getUserAndToken()
     const { token } = await getUserAndToken({ email: 'other@test.com' })
     const transaction = await prisma.transaction.create({

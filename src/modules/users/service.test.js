@@ -1,63 +1,51 @@
 import { decodeBasicToken } from './services'
 
 describe('User services', () => {
-  it('should return user by basic authentication token', () => {
-    // prepare
+  it('should decode a Basic authentication token', () => {
     const email = 'test@test.com'
     const password = '1234'
     const token = Buffer.from(`${email}:${password}`, 'utf8').toString('base64')
 
     const basicToken = `Basic ${token}`
 
-    // execution
     const result = decodeBasicToken(basicToken)
 
-    //expectation
     expect(result).toEqual([email, password])
   })
 
-  it('should throw new error when token is not Basic type', () => {
-    // prepare
+  it('should reject an unsupported authorization type', () => {
     const email = 'test@test.com'
     const password = '1234'
     const token = Buffer.from(`${email}:${password}`, 'utf8').toString('base64')
 
     const basicToken = `Bearer ${token}`
 
-    // execution
     const result = () => decodeBasicToken(basicToken)
 
-    //expectation
-    expect(result).toThrow('Wrong token type')
+    expect(result).toThrow('Unsupported authorization type')
   })
 
-  it('should throw a new error when credentials are not in the correct format', () => {
-    // prepare
+  it('should reject credentials without the email:password separator', () => {
     const email = 'test@test.com'
     const password = '1234'
     const token = Buffer.from(`${email}${password}`, 'utf8').toString('base64')
 
     const basicToken = `Basic ${token}`
 
-    // execution
     const result = () => decodeBasicToken(basicToken)
 
-    //expectation
-    expect(result).toThrow('Wrong credentials format')
+    expect(result).toThrow('Credentials must use email:password format')
   })
 
-  it('should throw new error when credentials is not base64 encoded', () => {
-    // prepare
+  it('should reject credentials that are not valid Base64', () => {
     const email = 'test@test.com'
     const password = '1234'
     const token = `${email}:${password}`
 
     const basicToken = `Basic ${token}`
 
-    // execution
     const result = () => decodeBasicToken(basicToken)
 
-    //expectation
-    expect(result).toThrow('Wrong credentials is not correct encoded')
+    expect(result).toThrow('Credentials are not valid Base64')
   })
 })

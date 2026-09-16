@@ -389,7 +389,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response with the query param.",
+            "description": "Successful response with the query parameter.",
             "content": {
               "application/json": {
                 "schema": {
@@ -726,7 +726,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Delete request completed for the authenticated user.",
+            "description": "Transaction deleted successfully.",
             "content": {
               "application/json": {
                 "schema": {
