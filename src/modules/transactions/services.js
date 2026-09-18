@@ -66,6 +66,7 @@ export const getTodayTransactions = () => {
 
   return model.findMany({
     where: {
+      resolved: false,
       dueDate: {
         gte: new Date(year, month, day, 0, 0),
         lt: addDays(new Date(year, month, day, 0, 0), 1),
@@ -78,13 +79,23 @@ export const getTodayTransactions = () => {
 }
 
 export const sendNotifications = transactions => {
-  const messages = transactions.map(transaction => ({
-    notification: {
-      title: 'Today is the due date for a bill.',
-      body: `Your bill '${transaction.description}' is due today.`,
-    },
-    token: transaction.user.firebaseToken,
-  }))
+  const messages = []
+
+  transactions.forEach(transaction => {
+    const token = transaction.user.firebaseToken
+
+    if (!token) return
+
+    messages.push({
+      notification: {
+        title: 'Today is the due date for a bill.',
+        body: `Your bill '${transaction.description}' is due today.`,
+      },
+      token,
+    })
+  })
+
+  if (!messages.length) return
 
   return firebaseAdmin.getMessaging().sendEach(messages)
 }
