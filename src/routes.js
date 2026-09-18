@@ -254,6 +254,8 @@ router.get(
  *         $ref: '#/components/responses/InvalidBody'
  *       '401':
  *         $ref: '#/components/responses/Unauthorized'
+ *       '404':
+ *         description: Transaction not found for the authenticated user.
  *   delete:
  *     summary: Delete a transaction
  *     tags: [Transactions]
@@ -274,6 +276,8 @@ router.get(
  *                   type: string
  *       '401':
  *         $ref: '#/components/responses/Unauthorized'
+ *       '404':
+ *         description: Transaction not found for the authenticated user.
  */
 router.put(
   '/transactions/:id',

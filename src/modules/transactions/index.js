@@ -38,20 +38,28 @@ export const update = async ctx => {
     data: ctx.request.body,
   })
 
+  if (!transaction.count) {
+    ctx.status = 404
+    ctx.body = { error: 'Transaction not found' }
+    return
+  }
+
   ctx.body = transaction
 }
 
 export const remove = async ctx => {
-  await model.removeMany({
+  const transaction = await model.removeMany({
     where: {
       id: ctx.params.id,
       userId: ctx.auth.user.id,
     },
   })
 
-  ctx.body = { id: ctx.params.id }
-}
+  if (!transaction.count) {
+    ctx.status = 404
+    ctx.body = { error: 'Transaction not found' }
+    return
+  }
 
-export const balance = async ctx => {
-  ctx.body = 100000
+  ctx.body = { id: ctx.params.id }
 }

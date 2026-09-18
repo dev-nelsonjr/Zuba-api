@@ -706,6 +706,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Transaction not found for the authenticated user."
           }
         }
       },
@@ -745,6 +748,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Transaction not found for the authenticated user."
           }
         }
       }

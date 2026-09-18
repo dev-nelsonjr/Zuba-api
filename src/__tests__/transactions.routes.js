@@ -147,6 +147,18 @@ describe('Transaction routes', () => {
     expect(updatedTransaction.resolved).toBe(true)
   })
 
+  it('should return not found when updating a missing transaction', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .put('/transactions/missing-transaction')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ resolved: true })
+
+    expect(res.status).toBe(404)
+    expect(res.body.error).toBe('Transaction not found')
+  })
+
   it('should delete a transaction owned by the authenticated user', async () => {
     const { user, token } = await getUserAndToken()
     const transaction = await prisma.transaction.create({
@@ -183,7 +195,7 @@ describe('Transaction routes', () => {
       },
     })
 
-    await request(server)
+    const res = await request(server)
       .delete(`/transactions/${transaction.id}`)
       .set('Authorization', `Bearer ${token}`)
 
@@ -191,6 +203,8 @@ describe('Transaction routes', () => {
       where: { id: transaction.id },
     })
 
+    expect(res.status).toBe(404)
+    expect(res.body.error).toBe('Transaction not found')
     expect(storedTransaction).not.toBeNull()
   })
 
