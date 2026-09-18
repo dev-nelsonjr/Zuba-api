@@ -55,6 +55,9 @@ export const getListByMonth = ({ month, year, ...params }) => {
         lt: new Date(year, month + 1, 1),
       },
     },
+    orderBy: {
+      dueDate: 'asc',
+    },
   })
 }
 

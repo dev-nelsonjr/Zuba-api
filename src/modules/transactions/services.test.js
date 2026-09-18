@@ -38,6 +38,9 @@ describe('Transaction services', () => {
           lt: new Date(year, month + 1, 1),
         },
       },
+      orderBy: {
+        dueDate: 'asc',
+      },
     })
   })
 
