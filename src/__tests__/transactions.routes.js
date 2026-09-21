@@ -115,6 +115,25 @@ describe('Transaction routes', () => {
     expect(res.body.error).toBe('Invalid request body')
   })
 
+  it("should create a transaction with today's due date", async () => {
+    const { token } = await getUserAndToken()
+    const today = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'America/Sao_Paulo',
+    })
+
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        description: 'Today transaction',
+        value: '10.05',
+        dueDate: `${today}T12:00:00-03:00`,
+      })
+
+    expect(res.status).toBe(200)
+    expect(res.body.dueDate).toBeTruthy()
+  })
+
   it('should reject transaction with invalid value', async () => {
     const { token } = await getUserAndToken()
 
