@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { subDays } from 'date-fns'
 import { getUserAndToken } from '../../tests/auth'
 
 import { prisma } from '../data'
@@ -98,6 +99,22 @@ describe('Transaction routes', () => {
     expect(res.status).toBe(400)
   })
 
+  it('should reject transaction creation with a past due date', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        description: 'Past transaction',
+        value: '10.05',
+        dueDate: subDays(new Date(), 2).toISOString(),
+      })
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid request body')
+  })
+
   it('should reject transaction with invalid value', async () => {
     const { token } = await getUserAndToken()
 
@@ -117,6 +134,18 @@ describe('Transaction routes', () => {
       .put('/transactions/transaction-id')
       .set('Authorization', `Bearer ${token}`)
       .send({ value: 'ten' })
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid request body')
+  })
+
+  it('should reject transaction update with a past due date', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .put('/transactions/transaction-id')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ dueDate: subDays(new Date(), 2).toISOString() })
 
     expect(res.status).toBe(400)
     expect(res.body.error).toBe('Invalid request body')

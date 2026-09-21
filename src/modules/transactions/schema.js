@@ -5,10 +5,18 @@ const money = z.union([
   z.string().regex(/^-?\d+(\.\d{1,2})?$/),
 ])
 
+const dueDate = z.iso.datetime({ offset: true }).refine(value => {
+  const today = new Date().toLocaleDateString('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+  })
+
+  return value.slice(0, 10) >= today
+})
+
 export const createTransactionSchema = z.object({
   description: z.string().trim().min(1),
   value: money,
-  dueDate: z.iso.datetime({ offset: true }).optional(),
+  dueDate: dueDate.optional(),
   type: z.enum(['expense', 'revenue']).optional(),
 })
 

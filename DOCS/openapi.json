@@ -265,7 +265,8 @@
           },
           "dueDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Must be today or a future date."
           },
           "type": {
             "type": "string",
@@ -297,7 +298,8 @@
           },
           "dueDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Must be today or a future date."
           },
           "type": {
             "type": "string",
