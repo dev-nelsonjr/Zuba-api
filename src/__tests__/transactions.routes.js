@@ -127,6 +127,18 @@ describe('Transaction routes', () => {
     expect(res.body.error).toBe('Invalid request body')
   })
 
+  it('should reject transaction with more than two decimal places', async () => {
+    const { token } = await getUserAndToken()
+
+    const res = await request(server)
+      .post('/transactions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ description: 'Invalid amount', value: '10.123' })
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Invalid request body')
+  })
+
   it('should reject transaction update with invalid value', async () => {
     const { token } = await getUserAndToken()
 

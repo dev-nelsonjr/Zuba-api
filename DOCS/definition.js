@@ -110,9 +110,9 @@ module.exports = {
           description: { type: 'string' },
           value: {
             type: 'string',
-            pattern: '^-?\\d+(\\.\\d{1,2})?$',
             example: '-42.50',
-            description: 'Decimal value serialized as a string.',
+            description:
+              'Decimal value with up to two decimal places, serialized as a string.',
           },
           recurrence: {
             type: 'string',
@@ -136,9 +136,10 @@ module.exports = {
         properties: {
           description: { type: 'string', minLength: 1 },
           value: {
+            description: 'Numeric value with up to two decimal places.',
             oneOf: [
               { type: 'number' },
-              { type: 'string', pattern: '^-?\\d+(\\.\\d{1,2})?$' },
+              { type: 'string' },
             ],
           },
           dueDate: {
@@ -155,9 +156,10 @@ module.exports = {
         properties: {
           description: { type: 'string', minLength: 1 },
           value: {
+            description: 'Numeric value with up to two decimal places.',
             oneOf: [
               { type: 'number' },
-              { type: 'string', pattern: '^-?\\d+(\\.\\d{1,2})?$' },
+              { type: 'string' },
             ],
           },
           dueDate: {

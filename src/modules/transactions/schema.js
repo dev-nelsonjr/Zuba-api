@@ -1,9 +1,17 @@
 import { z } from 'zod'
 
-const money = z.union([
-  z.number().finite(),
-  z.string().regex(/^-?\d+(\.\d{1,2})?$/),
-])
+const isMoney = value => {
+  const number = Number(value)
+
+  if (!Number.isFinite(number)) return false
+
+  const roundedNumber = Number(number.toFixed(2))
+  return roundedNumber === number
+}
+
+const money = z
+  .union([z.number().finite(), z.string().trim().min(1)])
+  .refine(isMoney)
 
 const dueDate = z.iso.datetime({ offset: true }).refine(value => {
   const today = new Date().toLocaleDateString('en-CA', {
