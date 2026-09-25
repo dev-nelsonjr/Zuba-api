@@ -1,6 +1,6 @@
 # Zuba API
 
-API do **Zuba**, um MVP de controle financeiro pessoal. O serviço concentra autenticação, contas de usuário, transações, consolidação mensal do dashboard e envio de lembretes de vencimento.
+API do **Zuba**, uma aplicação de planejamento de fluxo de caixa pessoal. O serviço concentra autenticação, contas de usuário, receitas e despesas previstas, consolidação mensal do dashboard e envio de lembretes de vencimento.
 
 O projeto foi desenvolvido individualmente e integra a [aplicação web](https://github.com/dev-nelsonjr/Zuba-web) e o [aplicativo mobile](https://github.com/dev-nelsonjr/zuba-mobile).
 
@@ -10,8 +10,8 @@ O projeto foi desenvolvido individualmente e integra a [aplicação web](https:/
 
 - Cadastro e autenticação com JWT
 - Atualização e remoção de conta
-- Criação, consulta, edição e exclusão de transações
-- Controle de transações pendentes e concluídas
+- Criação, consulta, edição e exclusão de receitas e despesas previstas
+- Controle de transações pendentes, recebidas e pagas
 - Consulta por mês e ano
 - Consolidação de receitas, despesas e saldo mensal
 - Endpoint dedicado ao dashboard dos clientes
@@ -145,4 +145,4 @@ O arquivo [`render.yaml`](render.yaml) descreve o serviço da API. Em produção
 
 ## Escopo do MVP
 
-O fluxo principal está completo: criar uma conta, autenticar, administrar transações e consultar o resultado mensal nos clientes Web e Mobile. Integração contínua, recuperação de senha e observabilidade mais detalhada permanecem como evoluções futuras.
+O fluxo principal está completo: criar uma conta, autenticar, planejar receitas e despesas e acompanhar o resultado mensal nos clientes Web e Mobile. Integração contínua, recuperação de senha e observabilidade mais detalhada permanecem como evoluções futuras.
